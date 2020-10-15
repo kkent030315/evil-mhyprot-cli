@@ -169,7 +169,8 @@ bool mhyprot::driver_impl::driver_init(bool debug_prints, bool print_seeds)
     //
     // driver's base address in the system
     //
-    uint64_t mhyprot_address = win_utils::obtain_sysmodule_address(MHYPROT_SYSFILE_NAME, debug_prints);
+    uint64_t mhyprot_address = win_utils::
+        obtain_sysmodule_address(MHYPROT_SYSFILE_NAME, debug_prints);
 
     if (!mhyprot_address)
     {
@@ -183,7 +184,8 @@ bool mhyprot::driver_impl::driver_init(bool debug_prints, bool print_seeds)
     // read the pointer that points to the seedmap that used to encrypt payloads
     // the pointer on the [driver.sys + 0xA0E8]
     //
-    uint64_t seedmap_address = driver_impl::read_kernel_memory<uint64_t>(mhyprot_address + MHYPROT_OFFSET_SEEDMAP);
+    uint64_t seedmap_address = driver_impl::
+        read_kernel_memory<uint64_t>(mhyprot_address + MHYPROT_OFFSET_SEEDMAP);
 
     logger::log("[+] seedmap in kernel [0x%llX + 0x%lX] @ (seedmap)0x%llX\n",
         mhyprot_address, MHYPROT_OFFSET_SEEDMAP, seedmap_address);
