@@ -78,13 +78,6 @@ bool service_utils::stop_service(SC_HANDLE service_handle)
         return false;
     }
 
-    if (!DeleteService(service_handle))
-    {
-        logger::log("[!] failed to delete the service. (0x%lX)\n", GetLastError());
-        CloseServiceHandle(sc_manager_handle);
-        return false;
-    }
-
     CloseServiceHandle(sc_manager_handle);
 
     return true;
