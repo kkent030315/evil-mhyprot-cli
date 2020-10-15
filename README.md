@@ -23,6 +23,8 @@ Also:
 The `mhyprot` is an anti-cheat kernel mode driver used in [`Genshin Impact`](https://genshin.mihoyo.com/ja).  
 The driver has a vulnerable `IOCTL` commands that allows us to execute `MmCopyVirtualMemory` and `memcpy(in the kernel!)` from ring-3 (usermode).
 
+![IMAGE](mhyprot.png)
+
 # Impact
 
 allows SMEP? not yet sure but since it allows us to controll kernel memory i dont think it's not possible.
