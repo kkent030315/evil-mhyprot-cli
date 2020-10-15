@@ -3,7 +3,7 @@
 # evil-mhyprot-cli
 A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in kernel/user from usermode.
 
-brand new rootkit!
+### Static Library is here: [libmhyprot](https://github.com/kkent030315/libmhyprot)
 
 # Overview
 
