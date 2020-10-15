@@ -348,3 +348,17 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+libmhyprot/*.cpp
+libmhyprot/*.hpp
+libmhyprot/*.h
+libmhyprot/*.vcxproj
+libmhyprot/*.vcxproj.filters
+
+tests/*.cpp
+tests/*.hpp
+tests/*.h
+tests/*.vcxproj
+tests/*.vcxproj.filters
+
+evil-mhyrot-cli.sln
