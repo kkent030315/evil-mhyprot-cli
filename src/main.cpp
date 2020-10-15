@@ -30,7 +30,7 @@ int main(int argc, const char** argv)
 
     const std::string option(argv[2]);
 
-    if (!(option.find("-") != std::string::npos))
+    if (!CONTAINS(option, "-"))
     {
         PRINT_USAGE();
         return -1;
