@@ -103,6 +103,9 @@ void mhyprot::unload()
     }
 }
 
+//
+// send ioctl request to the vulnerable driver
+//
 bool mhyprot::driver_impl::request_ioctl(DWORD ioctl_code, LPVOID in_buffer, DWORD in_buffer_size)
 {
     //
@@ -143,6 +146,9 @@ bool mhyprot::driver_impl::request_ioctl(DWORD ioctl_code, LPVOID in_buffer, DWO
     return result;
 }
 
+//
+// initialize driver implementations with payload encryption requirements
+//
 bool mhyprot::driver_impl::driver_init(bool debug_prints, bool print_seeds)
 {
     logger::log("[>] initializing driver...\n");
