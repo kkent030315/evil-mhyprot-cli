@@ -9,8 +9,8 @@ A brand new rootkit!
 
 What we can do with this CLI is as follows:
 
-- Read/Write any memory from kernel
-- Read/Write any memory from usermode
+- Read/Write any kernel memory with privilege of kernel
+- Read/Write any user memory with privilege of kernel
 - All operations are executed as kernel level privileage by the vulnerable driver
 
 Also:
