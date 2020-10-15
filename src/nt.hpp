@@ -1,6 +1,10 @@
 #pragma once
 #include <Windows.h>
 
+//
+// windows native definitions
+//
+
 #ifndef NT_SUCCESS
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 #endif

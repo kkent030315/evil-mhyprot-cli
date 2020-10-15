@@ -17,6 +17,9 @@ logger::log("      t: test\n");                                 \
 logger::log("      d: debug prints\n");                         \
 logger::log("      s: print seeds\n");                          \
 
+//
+// main entry point of this cli
+//
 int main(int argc, const char** argv)
 {
     if (argc < 3)
@@ -33,6 +36,9 @@ int main(int argc, const char** argv)
         return -1;
     }
 
+    //
+    // find process id
+    //
     const uint32_t process_id = win_utils::find_process_id(argv[1]);
 
     if (!process_id)
@@ -43,12 +49,18 @@ int main(int argc, const char** argv)
 
     logger::log("[+] %s (%d)\n", argv[1], process_id);
 
+    //
+    // initialize its service, etc
+    //
     if (!mhyprot::init())
     {
         logger::log("[!] failed to initialize vulnerable driver\n");
         return -1;
     }
 
+    //
+    // initialize driver implementations
+    //
     if (!mhyprot::driver_impl::driver_init(
         CONTAINS(option, "d"),
         CONTAINS(option, "s")
@@ -59,6 +71,9 @@ int main(int argc, const char** argv)
         return -1;
     }
 
+    //
+    // perform tests
+    //
     if (CONTAINS(option, "t"))
         sup::perform_tests(process_id);
 

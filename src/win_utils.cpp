@@ -1,5 +1,8 @@
 #include "win_utils.hpp"
 
+//
+// find the process id by specific name using ToolHelp32Snapshot
+//
 uint32_t win_utils::find_process_id(const std::string_view process_name)
 {
 	PROCESSENTRY32 processentry = {};
@@ -25,13 +28,16 @@ uint32_t win_utils::find_process_id(const std::string_view process_name)
 	return 0;
 }
 
+//
+// find the base address of process by the pid using ToolHelp32Snapshot
+//
 uint64_t win_utils::find_base_address(const uint32_t process_id)
 {
 	MODULEENTRY32 module_entry = {};
 
 	const unique_handle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, process_id), &CloseHandle);
 
-	if (snapshot.get() == INVALID_HANDLE_VALUE)
+	if (!CHECK_HANDLE(snapshot.get()))
 	{
 		printf("[!] Failed to create ToolHelp32Snapshot [0x%lX]\n", GetLastError());
 		return 0;
@@ -44,6 +50,10 @@ uint64_t win_utils::find_base_address(const uint32_t process_id)
 	return (uint64_t)module_entry.modBaseAddr;
 }
 
+//
+// lookup base address of specific module that loaded in the system
+// by NtQuerySystemInformation api
+//
 uint64_t win_utils::obtain_sysmodule_address(
 	const std::string_view target_module_name,
 	bool debug_prints

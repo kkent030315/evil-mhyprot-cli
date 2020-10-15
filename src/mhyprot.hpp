@@ -74,9 +74,7 @@ namespace mhyprot
 		void encrypt_payload(void* payload, size_t size);
 
 		bool read_kernel_memory(uint64_t address, void* buffer, size_t size);
-
-		template<class T>
-		__forceinline T read_kernel_memory(uint64_t address)
+		template<class T> __forceinline T read_kernel_memory(uint64_t address)
 		{
 			T buffer;
 			read_kernel_memory(address, &buffer, sizeof(T));
@@ -84,9 +82,7 @@ namespace mhyprot
 		}
 
 		bool read_user_memory(uint32_t process_id, uint64_t address, void* buffer, size_t size);
-
-		template<class T>
-		__forceinline T read_user_memory(uint32_t process_id, uint64_t address)
+		template<class T> __forceinline T read_user_memory(uint32_t process_id, uint64_t address)
 		{
 			T buffer;
 			read_user_memory(process_id, address, &buffer, sizeof(T));
@@ -94,9 +90,7 @@ namespace mhyprot
 		}
 
 		bool write_user_memory(uint32_t process_id, uint64_t address, void* buffer, size_t size);
-
-		template<class T>
-		__forceinline bool write_user_memory(uint32_t process_id, uint64_t address, T value)
+		template<class T> __forceinline bool write_user_memory(uint32_t process_id, uint64_t address, T value)
 		{
 			return write_user_memory(process_id, address, &value, sizeof(T));
 		}

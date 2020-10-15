@@ -1,6 +1,11 @@
 #include "file_utils.hpp"
 
-bool file_utils::create_file_from_buffer(const std::string_view file_path, void* buffer, size_t size)
+//
+// create file from memory
+//
+bool file_utils::create_file_from_buffer(
+	const std::string_view file_path, void* buffer, size_t size
+)
 {
     std::ofstream stream(
         file_path.data(),

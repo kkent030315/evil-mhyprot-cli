@@ -1,10 +1,17 @@
 #include "service_utils.hpp"
 
+//
+// open service control manager to operate services
+//
 SC_HANDLE service_utils::open_sc_manager()
 {
     return OpenSCManager(nullptr, nullptr, SC_MANAGER_CREATE_SERVICE);
 }
 
+//
+// create a new service
+// sc create myservice binPath="" type=kernel
+//
 SC_HANDLE service_utils::create_service(const std::string_view driver_path)
 {
     SC_HANDLE sc_manager_handle = open_sc_manager();
@@ -31,6 +38,10 @@ SC_HANDLE service_utils::create_service(const std::string_view driver_path)
     return mhyprot_service_handle;
 }
 
+//
+// delete the service
+// sc delete myservice
+//
 bool service_utils::delete_service(SC_HANDLE service_handle, bool close_on_fail, bool close_on_success)
 {
     SC_HANDLE sc_manager_handle = open_sc_manager();
@@ -58,11 +69,19 @@ bool service_utils::delete_service(SC_HANDLE service_handle, bool close_on_fail,
     return true;
 }
 
+//
+// start the service
+// sc start myservice
+//
 bool service_utils::start_service(SC_HANDLE service_handle)
 {
     return StartService(service_handle, 0, nullptr);
 }
 
+//
+// stop the service
+// sc stop myservice
+//
 bool service_utils::stop_service(SC_HANDLE service_handle)
 {
     SC_HANDLE sc_manager_handle = open_sc_manager();
