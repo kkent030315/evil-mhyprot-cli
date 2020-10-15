@@ -11,7 +11,7 @@
 #define MHYPROT_SERVICE_NAME "mhyprot2"
 #define MHYPROT_DISPLAY_NAME "mhyprot2"
 #define MHYPROT_SYSFILE_NAME "mhyprot.sys"
-#define MHYPROT_SYSMODULE_NAME "mhyprot2.Sys"
+#define MHYPROT_SYSMODULE_NAME "mhyprot2.sys"
 
 #define MHYPROT_DEVICE_NAME "\\\\?\\\\mhyprot2"
 
