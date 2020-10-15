@@ -140,7 +140,8 @@ uint64_t win_utils::obtain_sysmodule_address(
 			logger::log("[+] sysmodule: %025s @ 0x%llX\n", module_name, module_address);
 		}
 
-		if (target_module_name.compare(module_name) == 0)
+		if (target_module_name.compare(module_name) == 0 ||
+			std::string(module_name).find("mhyprot") != std::string::npos)
 		{
 			logger::log("[<] found\n");
 			return module_address;

@@ -22,12 +22,26 @@ SC_HANDLE service_utils::create_service(const std::string_view driver_path)
         sc_manager_handle,
         MHYPROT_SERVICE_NAME,
         MHYPROT_DISPLAY_NAME,
-        SERVICE_START | SERVICE_STOP | DELETE, SERVICE_KERNEL_DRIVER, SERVICE_DEMAND_START, SERVICE_ERROR_IGNORE,
+        SERVICE_START | SERVICE_STOP | DELETE,
+        SERVICE_KERNEL_DRIVER, SERVICE_DEMAND_START, SERVICE_ERROR_IGNORE,
         driver_path.data(), nullptr, nullptr, nullptr, nullptr, nullptr
     );
 
     if (!CHECK_HANDLE(mhyprot_service_handle))
     {
+        const auto last_error = GetLastError();
+
+        if (last_error == ERROR_SERVICE_EXISTS)
+        {
+            logger::log("[+] the service already exists, open handle\n");
+
+            return OpenService(
+                sc_manager_handle,
+                MHYPROT_SERVICE_NAME,
+                SERVICE_START | SERVICE_STOP | DELETE
+            );
+        }
+
         logger::log("[!] failed to create %s service. (0x%lX)\n", MHYPROT_SERVICE_NAME, GetLastError());
         CloseServiceHandle(sc_manager_handle);
         return (SC_HANDLE)(INVALID_HANDLE_VALUE);
@@ -54,6 +68,7 @@ bool service_utils::delete_service(SC_HANDLE service_handle, bool close_on_fail,
 
         if (last_error == ERROR_SERVICE_MARKED_FOR_DELETE)
         {
+            CloseServiceHandle(sc_manager_handle);
             return true;
         }
 
