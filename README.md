@@ -11,12 +11,12 @@ What we can do with this CLI is as follows:
 
 - Read/Write any kernel memory with privilege of kernel
 - Read/Write any user memory with privilege of kernel
-- All operations are executed as kernel level privileage by the vulnerable driver
+- All operations are executed as kernel level privilege by the vulnerable driver
 
 Also:
 
-- Administrator privileage only needed if the service is not yet running
-- Therefore we can execute commands above as the normal user (w/o administrator privileage)
+- Administrator privilege only needed if the service is not yet running
+- Therefore we can execute commands above as the normal user (w/o administrator privilege)
 
 ---
 
@@ -30,7 +30,7 @@ allows SMEP? not yet sure but since it allows us to controll kernel memory i don
 # Requirements
 
 - Any version of Windows x64 that the driver works on
-- Administrator privileage does not required if the service already running
+- Administrator privilege does not required if the service already running
 
 # Usage
 
