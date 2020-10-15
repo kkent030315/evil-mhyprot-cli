@@ -62,8 +62,8 @@ int main(int argc, const char** argv)
     // initialize driver implementations
     //
     if (!mhyprot::driver_impl::driver_init(
-        CONTAINS(option, "d"),
-        CONTAINS(option, "s")
+        CONTAINS(option, "d"), // print debug
+        CONTAINS(option, "s")  // print seedmap
     ))
     {
         logger::log("[!] failed to initialize driver properly\n");
