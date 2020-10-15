@@ -103,6 +103,9 @@ void mhyprot::unload()
     }
 }
 
+//
+// send ioctl request to the vulnerable driver
+//
 bool mhyprot::driver_impl::request_ioctl(DWORD ioctl_code, LPVOID in_buffer, DWORD in_buffer_size)
 {
     //
@@ -200,6 +203,8 @@ bool mhyprot::driver_impl::driver_init(bool debug_prints, bool print_seeds)
         logger::log("[!] failed to pickup seedmap from kernel\n");
         return false;
     }
+
+    logger::log("[+] seedmap(0) 0x%llX\n", detail::seedmap[0]);
 
     for (int i = 0; i < (sizeof(detail::seedmap) / sizeof(detail::seedmap[0])); i++)
     {
