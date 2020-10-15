@@ -1,9 +1,9 @@
 ![IMAGE](image01.png)
 
 # evil-mhyprot-cli
-An PoC for vulnerable driver "mhyprot" that allows us to read/write memory in kernel/user from usermode.
+A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in kernel/user from usermode.
 
-A brand new rootkit!
+brand new rootkit!
 
 # Overview
 
