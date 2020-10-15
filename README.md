@@ -7,7 +7,7 @@ A brand new rootkit!
 
 # Overview
 
-What we can do with this driver is as follows:
+What we can do with this CLI is as follows:
 
 - Read/Write any memory from kernel
 - Read/Write any memory from usermode
