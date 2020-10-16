@@ -48,3 +48,33 @@ following options are available as of now:
   - Print debug infos
 - `s`
   - Print seedmap
+
+# Analysis and Proofs
+
+The mhyprot calls `MmCopyVirtualMemory` eventually as wrapper defined as follows:
+
+```cpp
+__int64 __fastcall sub_FFFFF800188C3EB8(struct _EPROCESS *a1, _DWORD *a2, __int64 a3)
+{
+  __int64 v3; // rbp
+  _DWORD *v4; // rdi
+  struct _EPROCESS *v5; // rbx
+  PEPROCESS v6; // rsi
+  char v8; // [rsp+28h] [rbp-20h]
+
+  v3 = a3;
+  v4 = a2;
+  v5 = a1;
+  if ( *a2 == 1 )
+  {
+    v6 = IoGetCurrentProcess();
+  }
+  else
+  {
+    v6 = a1;
+    v5 = IoGetCurrentProcess();
+  }
+  v8 = 0;
+  return MmCopyVirtualMemory(v6, *((_QWORD *)v4 + 3), v5, *((_QWORD *)v4 + 2), (unsigned int)v4[8], v8, v3);
+}
+```
