@@ -27,7 +27,7 @@ The driver has a vulnerable `IOCTL` commands that allows us to execute `MmCopyVi
 
 # Impact
 
-allows SMEP? not yet sure but since it allows us to controll kernel memory i dont think it's not possible.
+allows SMEP? not yet sure but since it allows us to control kernel memory i dont think it's not possible.
 
 # Requirements
 
