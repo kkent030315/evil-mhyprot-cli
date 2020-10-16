@@ -101,7 +101,7 @@ __int64 __fastcall sub_FFFFF800188C3F2C(_DWORD *a1_rw_request, __int64 a2_return
   v6_ntstatus_lookup_success_bool = (int)PsLookupProcessByProcessId(v5_processid, &Object, a3) >= 0;// NT_SUCCESS
   if ( !Object )
     return 3221225473i64;
-  v8_ntstatus = FFFFF800188C3EB8_MmCopyVirtualMemoryWrap((struct _EPROCESS *)Object, v4_rw_request, v3_returnsize);
+  v8_ntstatus = sub_FFFFF800188C3EB8((struct _EPROCESS *)Object, v4_rw_request, v3_returnsize);
   if ( v6_ntstatus_lookup_success_bool )
     ObfDereferenceObject(Object);
   return v8_ntstatus;
@@ -119,7 +119,7 @@ bool __fastcall sub_FFFFF800188C4214(_DWORD *a1_rw_request, _DWORD *a2_returnsiz
 
   v3_returnsize = a2_returnsize;
   v6_returnsize = 0i64;
-  v5_ntstatus = FFFFF800188C3F2C_WrapMmCopyVirtualMemoryWrap(a1_rw_request, (__int64)&v6_returnsize, a3);
+  v5_ntstatus = sub_FFFFF800188C3F2C(a1_rw_request, (__int64)&v6_returnsize, a3);
   *v3_returnsize = v6_returnsize;
   return v5_ntstatus == 0;                      // NT_SUCCESS(v5_ntstatus)
 }
