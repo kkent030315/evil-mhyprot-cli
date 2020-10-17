@@ -1,0 +1,308 @@
+PAGE:FFFFF800188CD6E0 ; =============== S U B R O U T I N E =======================================
+PAGE:FFFFF800188CD6E0
+PAGE:FFFFF800188CD6E0
+PAGE:FFFFF800188CD6E0 sub_FFFFF800188CD6E0 proc near          ; DATA XREF: sub_FFFFF800189F277D+130↓o
+PAGE:FFFFF800188CD6E0                                         ; .upx0:FFFFF800189F29C4↓o ...
+PAGE:FFFFF800188CD6E0
+PAGE:FFFFF800188CD6E0 var_1A8         = qword ptr -1A8h
+PAGE:FFFFF800188CD6E0 var_198         = byte ptr -198h
+PAGE:FFFFF800188CD6E0 var_18          = byte ptr -18h
+PAGE:FFFFF800188CD6E0 arg_0           = qword ptr  8
+PAGE:FFFFF800188CD6E0 arg_8           = dword ptr  10h
+PAGE:FFFFF800188CD6E0 P               = qword ptr  18h
+PAGE:FFFFF800188CD6E0 arg_18          = qword ptr  20h
+PAGE:FFFFF800188CD6E0
+PAGE:FFFFF800188CD6E0                 mov     [rsp+arg_0], rbx
+PAGE:FFFFF800188CD6E5                 mov     [rsp+arg_18], rbp
+PAGE:FFFFF800188CD6EA                 push    rsi
+PAGE:FFFFF800188CD6EB                 push    rdi
+PAGE:FFFFF800188CD6EC                 push    r14
+PAGE:FFFFF800188CD6EE                 sub     rsp, 1B0h
+PAGE:FFFFF800188CD6F5                 mov     rax, [rdx+0B8h]
+PAGE:FFFFF800188CD6FC                 mov     rbp, rdx
+PAGE:FFFFF800188CD6FF                 mov     rdi, [rdx+18h]
+PAGE:FFFFF800188CD703                 mov     ecx, [rax+18h]
+PAGE:FFFFF800188CD706                 mov     r8d, [rax+10h]
+PAGE:FFFFF800188CD70A                 mov     esi, [rax+8]
+PAGE:FFFFF800188CD70D                 and     qword ptr [rdx+38h], 0
+PAGE:FFFFF800188CD712                 cmp     ecx, 80104000h
+PAGE:FFFFF800188CD718                 jnz     short loc_FFFFF800188CD737
+PAGE:FFFFF800188CD71A                 mov     edx, r8d
+PAGE:FFFFF800188CD71D                 mov     rcx, rdi
+PAGE:FFFFF800188CD720                 call    sub_FFFFF800188C21EC
+PAGE:FFFFF800188CD725                 mov     cs:dword_FFFFF800188CA110, eax
+PAGE:FFFFF800188CD72B                 neg     eax
+PAGE:FFFFF800188CD72D                 sbb     rcx, rcx
+PAGE:FFFFF800188CD730                 and     ecx, 1
+PAGE:FFFFF800188CD733                 mov     [rdi], ecx
+PAGE:FFFFF800188CD735                 jmp     short loc_FFFFF800188CD75C
+PAGE:FFFFF800188CD737 ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD737
+PAGE:FFFFF800188CD737 loc_FFFFF800188CD737:                   ; CODE XREF: sub_FFFFF800188CD6E0+38↑j
+PAGE:FFFFF800188CD737                 lea     eax, [rcx+7FEEC000h]
+PAGE:FFFFF800188CD73D                 mov     edx, 80134000h
+PAGE:FFFFF800188CD742                 test    eax, 0FFFCFFFFh
+PAGE:FFFFF800188CD747                 jnz     short loc_FFFFF800188CD751
+PAGE:FFFFF800188CD749                 cmp     ecx, edx
+PAGE:FFFFF800188CD74B                 jnz     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD751
+PAGE:FFFFF800188CD751 loc_FFFFF800188CD751:                   ; CODE XREF: sub_FFFFF800188CD6E0+67↑j
+PAGE:FFFFF800188CD751                 cmp     ecx, edx
+PAGE:FFFFF800188CD753                 jnz     short loc_FFFFF800188CD766
+PAGE:FFFFF800188CD755                 call    sub_FFFFF800188C2314
+PAGE:FFFFF800188CD75A                 mov     [rdi], eax
+PAGE:FFFFF800188CD75C
+PAGE:FFFFF800188CD75C loc_FFFFF800188CD75C:                   ; CODE XREF: sub_FFFFF800188CD6E0+55↑j
+PAGE:FFFFF800188CD75C                 mov     esi, 4
+PAGE:FFFFF800188CD761                 jmp     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD766 ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD766
+PAGE:FFFFF800188CD766 loc_FFFFF800188CD766:                   ; CODE XREF: sub_FFFFF800188CD6E0+73↑j
+PAGE:FFFFF800188CD766                 cmp     ecx, 82054000h
+PAGE:FFFFF800188CD76C                 jnz     short loc_FFFFF800188CD77E
+PAGE:FFFFF800188CD76E                 mov     ecx, [rdi]
+PAGE:FFFFF800188CD770                 lea     rdx, [rdi+4]
+PAGE:FFFFF800188CD774                 mov     r8d, [rdx]
+PAGE:FFFFF800188CD777                 call    sub_FFFFF800188C26D0
+PAGE:FFFFF800188CD77C                 jmp     short loc_FFFFF800188CD7C1
+PAGE:FFFFF800188CD77E ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD77E
+PAGE:FFFFF800188CD77E loc_FFFFF800188CD77E:                   ; CODE XREF: sub_FFFFF800188CD6E0+8C↑j
+PAGE:FFFFF800188CD77E                 cmp     ecx, 83024000h
+PAGE:FFFFF800188CD784                 jnz     short loc_FFFFF800188CD794
+PAGE:FFFFF800188CD786                 lea     rcx, [rdi+4]
+PAGE:FFFFF800188CD78A                 mov     rdx, rdi
+PAGE:FFFFF800188CD78D                 call    sub_FFFFF800188C62EC
+PAGE:FFFFF800188CD792                 jmp     short loc_FFFFF800188CD7C1
+PAGE:FFFFF800188CD794 ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD794
+PAGE:FFFFF800188CD794 loc_FFFFF800188CD794:                   ; CODE XREF: sub_FFFFF800188CD6E0+A4↑j
+PAGE:FFFFF800188CD794                 cmp     ecx, 83074000h
+PAGE:FFFFF800188CD79A                 jnz     short loc_FFFFF800188CD7A9 ; MHYPROT_IOCTL_READ_KERNEL_MEMORY
+PAGE:FFFFF800188CD79C                 mov     edx, [rdi]
+PAGE:FFFFF800188CD79E                 lea     rcx, [rdi+4]
+PAGE:FFFFF800188CD7A2                 call    sub_FFFFF800188C5F18
+PAGE:FFFFF800188CD7A7                 jmp     short loc_FFFFF800188CD7C1
+PAGE:FFFFF800188CD7A9 ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD7A9
+PAGE:FFFFF800188CD7A9 loc_FFFFF800188CD7A9:                   ; CODE XREF: sub_FFFFF800188CD6E0+BA↑j
+PAGE:FFFFF800188CD7A9                 cmp     ecx, 83064000h  ; MHYPROT_IOCTL_READ_KERNEL_MEMORY
+PAGE:FFFFF800188CD7AF                 jnz     short loc_FFFFF800188CD7C8
+PAGE:FFFFF800188CD7B1                 mov     rdx, [rdi]
+PAGE:FFFFF800188CD7B4                 lea     rcx, [rdi+4]
+PAGE:FFFFF800188CD7B8                 mov     r8d, [rdi+8]
+PAGE:FFFFF800188CD7BC                 call    sub_FFFFF800188C63A8
+PAGE:FFFFF800188CD7C1
+PAGE:FFFFF800188CD7C1 loc_FFFFF800188CD7C1:                   ; CODE XREF: sub_FFFFF800188CD6E0+9C↑j
+PAGE:FFFFF800188CD7C1                                         ; sub_FFFFF800188CD6E0+B2↑j ...
+PAGE:FFFFF800188CD7C1                 mov     [rdi], eax
+PAGE:FFFFF800188CD7C3                 jmp     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD7C8 ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD7C8
+PAGE:FFFFF800188CD7C8 loc_FFFFF800188CD7C8:                   ; CODE XREF: sub_FFFFF800188CD6E0+CF↑j
+PAGE:FFFFF800188CD7C8                 cmp     ecx, 82074000h
+PAGE:FFFFF800188CD7CE                 jnz     loc_FFFFF800188CD868
+PAGE:FFFFF800188CD7D4                 cmp     r8d, 4
+PAGE:FFFFF800188CD7D8                 jb      loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD7DE                 cmp     esi, 38h ; '8'
+PAGE:FFFFF800188CD7E1                 jb      loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD7E7                 test    rdi, rdi
+PAGE:FFFFF800188CD7EA                 jz      loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD7F0                 mov     r8d, 4746544Dh  ; Tag
+PAGE:FFFFF800188CD7F6                 mov     rdx, rsi        ; NumberOfBytes
+PAGE:FFFFF800188CD7F9                 mov     ecx, 1          ; PoolType
+PAGE:FFFFF800188CD7FE                 call    cs:ExAllocatePoolWithTag
+PAGE:FFFFF800188CD804                 mov     r14, rax
+PAGE:FFFFF800188CD807                 lea     rcx, [rsi-8]
+PAGE:FFFFF800188CD80B                 mov     rax, 0AAAAAAAAAAAAAAABh
+PAGE:FFFFF800188CD815                 mul     rcx
+PAGE:FFFFF800188CD818                 shr     rdx, 5
+PAGE:FFFFF800188CD81C                 mov     ecx, edx
+PAGE:FFFFF800188CD81E                 mov     rdx, r14
+PAGE:FFFFF800188CD821                 mov     [r14], rcx
+PAGE:FFFFF800188CD824                 mov     rcx, rdi
+PAGE:FFFFF800188CD827                 call    sub_FFFFF800188C32B0
+PAGE:FFFFF800188CD82C                 mov     [rbp+30h], eax
+PAGE:FFFFF800188CD82F                 mov     rcx, [r14]
+PAGE:FFFFF800188CD832                 test    eax, eax
+PAGE:FFFFF800188CD834                 js      short loc_FFFFF800188CD853
+PAGE:FFFFF800188CD836                 lea     r8, [rcx+rcx*2]
+PAGE:FFFFF800188CD83A                 shl     r8, 4
+PAGE:FFFFF800188CD83E                 add     r8, 8
+PAGE:FFFFF800188CD842
+PAGE:FFFFF800188CD842 loc_FFFFF800188CD842:                   ; CODE XREF: sub_FFFFF800188CD6E0+1FC↓j
+PAGE:FFFFF800188CD842                 mov     rdx, r14
+PAGE:FFFFF800188CD845                 mov     [rbp+38h], r8
+PAGE:FFFFF800188CD849                 mov     rcx, rdi
+PAGE:FFFFF800188CD84C                 call    sub_FFFFF800188C75C0
+PAGE:FFFFF800188CD851                 jmp     short loc_FFFFF800188CD85B
+PAGE:FFFFF800188CD853 ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD853
+PAGE:FFFFF800188CD853 loc_FFFFF800188CD853:                   ; CODE XREF: sub_FFFFF800188CD6E0+154↑j
+PAGE:FFFFF800188CD853                 mov     esi, 8
+PAGE:FFFFF800188CD858                 mov     [rdi], rcx
+PAGE:FFFFF800188CD85B
+PAGE:FFFFF800188CD85B loc_FFFFF800188CD85B:                   ; CODE XREF: sub_FFFFF800188CD6E0+171↑j
+PAGE:FFFFF800188CD85B                                         ; sub_FFFFF800188CD6E0+208↓j
+PAGE:FFFFF800188CD85B                 mov     edx, 4746544Dh
+PAGE:FFFFF800188CD860                 mov     rcx, r14
+PAGE:FFFFF800188CD863                 jmp     loc_FFFFF800188CDA49
+PAGE:FFFFF800188CD868 ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD868
+PAGE:FFFFF800188CD868 loc_FFFFF800188CD868:                   ; CODE XREF: sub_FFFFF800188CD6E0+EE↑j
+PAGE:FFFFF800188CD868                 cmp     ecx, 82104000h
+PAGE:FFFFF800188CD86E                 jnz     short loc_FFFFF800188CD8ED
+PAGE:FFFFF800188CD870                 cmp     r8d, 28h ; '('
+PAGE:FFFFF800188CD874                 jb      loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD87A                 cmp     esi, 20h ; ' '
+PAGE:FFFFF800188CD87D                 jb      loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD883                 test    rdi, rdi
+PAGE:FFFFF800188CD886                 jz      loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD88C                 mov     r8d, 4746544Dh  ; Tag
+PAGE:FFFFF800188CD892                 mov     rdx, rsi        ; NumberOfBytes
+PAGE:FFFFF800188CD895                 mov     ecx, 1          ; PoolType
+PAGE:FFFFF800188CD89A                 call    cs:ExAllocatePoolWithTag
+PAGE:FFFFF800188CD8A0                 mov     r14, rax
+PAGE:FFFFF800188CD8A3                 lea     rcx, [rsi-4]
+PAGE:FFFFF800188CD8A7                 mov     rax, 0AAAAAAAAAAAAAAABh
+PAGE:FFFFF800188CD8B1                 mul     rcx
+PAGE:FFFFF800188CD8B4                 mov     rcx, rdi
+PAGE:FFFFF800188CD8B7                 shr     rdx, 4
+PAGE:FFFFF800188CD8BB                 mov     [r14], edx
+PAGE:FFFFF800188CD8BE                 mov     rdx, r14
+PAGE:FFFFF800188CD8C1                 call    sub_FFFFF800188C377C
+PAGE:FFFFF800188CD8C6                 mov     [rbp+30h], eax
+PAGE:FFFFF800188CD8C9                 mov     ecx, [r14]
+PAGE:FFFFF800188CD8CC                 test    eax, eax
+PAGE:FFFFF800188CD8CE                 js      short loc_FFFFF800188CD8E1
+PAGE:FFFFF800188CD8D0                 lea     rcx, [rcx+rcx*2]
+PAGE:FFFFF800188CD8D4                 lea     r8, ds:4[rcx*8]
+PAGE:FFFFF800188CD8DC                 jmp     loc_FFFFF800188CD842
+PAGE:FFFFF800188CD8E1 ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD8E1
+PAGE:FFFFF800188CD8E1 loc_FFFFF800188CD8E1:                   ; CODE XREF: sub_FFFFF800188CD6E0+1EE↑j
+PAGE:FFFFF800188CD8E1                 mov     esi, 4
+PAGE:FFFFF800188CD8E6                 mov     [rdi], ecx
+PAGE:FFFFF800188CD8E8                 jmp     loc_FFFFF800188CD85B
+PAGE:FFFFF800188CD8ED ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD8ED
+PAGE:FFFFF800188CD8ED loc_FFFFF800188CD8ED:                   ; CODE XREF: sub_FFFFF800188CD6E0+18E↑j
+PAGE:FFFFF800188CD8ED                 cmp     ecx, 82094000h
+PAGE:FFFFF800188CD8F3                 jnz     short loc_FFFFF800188CD8FD
+PAGE:FFFFF800188CD8F5                 and     dword ptr [rdi], 0
+PAGE:FFFFF800188CD8F8                 jmp     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD8FD ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD8FD
+PAGE:FFFFF800188CD8FD loc_FFFFF800188CD8FD:                   ; CODE XREF: sub_FFFFF800188CD6E0+213↑j
+PAGE:FFFFF800188CD8FD                 cmp     ecx, 80034000h
+PAGE:FFFFF800188CD903                 jnz     short loc_FFFFF800188CD984
+PAGE:FFFFF800188CD905                 cmp     r8d, 10h
+PAGE:FFFFF800188CD909                 jnz     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD90F                 mov     rax, 0EBBAAEF4FFF89042h
+PAGE:FFFFF800188CD919                 xor     [rdi+8], rax
+PAGE:FFFFF800188CD91D                 mov     rax, [rdi+8]
+PAGE:FFFFF800188CD921                 xor     [rdi], rax
+PAGE:FFFFF800188CD924                 cmp     dword ptr [rdi+4], 0BAEBAEECh
+PAGE:FFFFF800188CD92B                 jnz     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD931                 mov     ecx, [rdi]
+PAGE:FFFFF800188CD933                 call    sub_FFFFF800188C51A8
+PAGE:FFFFF800188CD938                 cmp     dword ptr cs:qword_FFFFF800188CA108, 0
+PAGE:FFFFF800188CD93F                 jnz     short loc_FFFFF800188CD97D
+PAGE:FFFFF800188CD941                 mov     rdx, [rdi+8]
+PAGE:FFFFF800188CD945                 lea     rcx, xmmword_FFFFF800188CA0E8
+PAGE:FFFFF800188CD94C                 call    sub_FFFFF800188C301C
+PAGE:FFFFF800188CD951                 mov     ebx, 7
+PAGE:FFFFF800188CD956
+PAGE:FFFFF800188CD956 loc_FFFFF800188CD956:                   ; CODE XREF: sub_FFFFF800188CD6E0+293↓j
+PAGE:FFFFF800188CD956                 lea     rcx, xmmword_FFFFF800188CA0E8
+PAGE:FFFFF800188CD95D                 call    sub_FFFFF800188C2EB0
+PAGE:FFFFF800188CD962                 mov     [rdi], rax
+PAGE:FFFFF800188CD965                 mov     dword ptr cs:qword_FFFFF800188CA108, 1
+PAGE:FFFFF800188CD96F                 sub     rbx, 1
+PAGE:FFFFF800188CD973                 jnz     short loc_FFFFF800188CD956
+PAGE:FFFFF800188CD975                 lea     esi, [rbx+8]
+PAGE:FFFFF800188CD978                 jmp     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD97D ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD97D
+PAGE:FFFFF800188CD97D loc_FFFFF800188CD97D:                   ; CODE XREF: sub_FFFFF800188CD6E0+25F↑j
+PAGE:FFFFF800188CD97D                 xor     esi, esi
+PAGE:FFFFF800188CD97F                 jmp     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD984 ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD984
+PAGE:FFFFF800188CD984 loc_FFFFF800188CD984:                   ; CODE XREF: sub_FFFFF800188CD6E0+223↑j
+PAGE:FFFFF800188CD984                 cmp     ecx, 81134000h
+PAGE:FFFFF800188CD98A                 jz      loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD990                 cmp     ecx, 81144000h
+PAGE:FFFFF800188CD996                 jnz     short loc_FFFFF800188CD9DE
+PAGE:FFFFF800188CD998                 mov     ecx, [rdi]
+PAGE:FFFFF800188CD99A                 lea     rdx, [rsp+1C8h+var_198]
+PAGE:FFFFF800188CD99F                 call    sub_FFFFF800188C6654
+PAGE:FFFFF800188CD9A4                 test    eax, eax
+PAGE:FFFFF800188CD9A6                 jns     short loc_FFFFF800188CD9B2
+PAGE:FFFFF800188CD9A8                 mov     esi, 4
+PAGE:FFFFF800188CD9AD                 jmp     loc_FFFFF800188CD7C1
+PAGE:FFFFF800188CD9B2 ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD9B2
+PAGE:FFFFF800188CD9B2 loc_FFFFF800188CD9B2:                   ; CODE XREF: sub_FFFFF800188CD6E0+2C6↑j
+PAGE:FFFFF800188CD9B2                 lea     esi, [rax+rax*2]
+PAGE:FFFFF800188CD9B5                 movsxd  rcx, eax
+PAGE:FFFFF800188CD9B8                 shl     esi, 3
+PAGE:FFFFF800188CD9BB                 test    eax, eax
+PAGE:FFFFF800188CD9BD                 jle     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD9C3                 lea     r8, [rcx+rcx*2]
+PAGE:FFFFF800188CD9C7                 mov     rcx, rdi
+PAGE:FFFFF800188CD9CA                 shl     r8, 3
+PAGE:FFFFF800188CD9CE                 lea     rdx, [rsp+1C8h+var_198]
+PAGE:FFFFF800188CD9D3                 and     r8, 0FFFFFFFFFFFFFFF8h
+PAGE:FFFFF800188CD9D7                 call    sub_FFFFF800188C75C0
+PAGE:FFFFF800188CD9DC                 jmp     short loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD9DE ; ---------------------------------------------------------------------------
+PAGE:FFFFF800188CD9DE
+PAGE:FFFFF800188CD9DE loc_FFFFF800188CD9DE:                   ; CODE XREF: sub_FFFFF800188CD6E0+2B6↑j
+PAGE:FFFFF800188CD9DE                 and     [rsp+1C8h+P], 0
+PAGE:FFFFF800188CD9E7                 lea     rax, [rsp+1C8h+arg_8]
+PAGE:FFFFF800188CD9EF                 and     [rsp+1C8h+arg_8], 0
+PAGE:FFFFF800188CD9F7                 lea     r9, [rsp+1C8h+P]
+PAGE:FFFFF800188CD9FF                 mov     rdx, rdi
+PAGE:FFFFF800188CDA02                 mov     [rsp+1C8h+var_1A8], rax
+PAGE:FFFFF800188CDA07                 call    sub_FFFFF800188CD000
+PAGE:FFFFF800188CDA0C                 test    al, al
+PAGE:FFFFF800188CDA0E                 jz      short loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CDA10                 mov     eax, [rsp+1C8h+arg_8]
+PAGE:FFFFF800188CDA17                 cmp     esi, eax
+PAGE:FFFFF800188CDA19                 mov     rbx, [rsp+1C8h+P]
+PAGE:FFFFF800188CDA21                 cmovb   eax, esi
+PAGE:FFFFF800188CDA24                 mov     [rsp+1C8h+arg_8], eax
+PAGE:FFFFF800188CDA2B                 test    rbx, rbx
+PAGE:FFFFF800188CDA2E                 jz      short loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CDA30                 test    eax, eax
+PAGE:FFFFF800188CDA32                 jz      short loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CDA34                 mov     r8d, eax
+PAGE:FFFFF800188CDA37                 mov     rdx, rbx
+PAGE:FFFFF800188CDA3A                 mov     rcx, rdi
+PAGE:FFFFF800188CDA3D                 mov     esi, eax
+PAGE:FFFFF800188CDA3F                 call    sub_FFFFF800188C75C0
+PAGE:FFFFF800188CDA44                 xor     edx, edx        ; Tag
+PAGE:FFFFF800188CDA46                 mov     rcx, rbx        ; P
+PAGE:FFFFF800188CDA49
+PAGE:FFFFF800188CDA49 loc_FFFFF800188CDA49:                   ; CODE XREF: sub_FFFFF800188CD6E0+183↑j
+PAGE:FFFFF800188CDA49                 call    cs:ExFreePoolWithTag
+PAGE:FFFFF800188CDA4F
+PAGE:FFFFF800188CDA4F loc_FFFFF800188CDA4F:                   ; CODE XREF: sub_FFFFF800188CD6E0+6B↑j
+PAGE:FFFFF800188CDA4F                                         ; sub_FFFFF800188CD6E0+81↑j ...
+PAGE:FFFFF800188CDA4F                 mov     eax, esi
+PAGE:FFFFF800188CDA51                 xor     edx, edx        ; PriorityBoost
+PAGE:FFFFF800188CDA53                 mov     [rbp+38h], rax
+PAGE:FFFFF800188CDA57                 mov     rcx, rbp        ; Irp
+PAGE:FFFFF800188CDA5A                 and     dword ptr [rbp+30h], 0
+PAGE:FFFFF800188CDA5E                 call    cs:IofCompleteRequest
+PAGE:FFFFF800188CDA64                 lea     r11, [rsp+1C8h+var_18]
+PAGE:FFFFF800188CDA6C                 xor     eax, eax
+PAGE:FFFFF800188CDA6E                 mov     rbx, [r11+20h]
+PAGE:FFFFF800188CDA72                 mov     rbp, [r11+38h]
+PAGE:FFFFF800188CDA76                 mov     rsp, r11
+PAGE:FFFFF800188CDA79                 pop     r14
+PAGE:FFFFF800188CDA7B                 pop     rdi
+PAGE:FFFFF800188CDA7C                 pop     rsi
+PAGE:FFFFF800188CDA7D                 retn
+PAGE:FFFFF800188CDA7D sub_FFFFF800188CD6E0 endp
