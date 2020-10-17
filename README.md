@@ -54,6 +54,8 @@ following options are available as of now:
 > The document(s) below is still in write
 so please forgive any mistakes I took in advance.
 
+## A Way of Read/Write Specific Process Memory
+
 The mhyprot calls `MmCopyVirtualMemory` eventually as wrapper defined as follows:
 
 ```cpp
@@ -135,3 +137,21 @@ PAGE:FFFFF800188CD311                 mov     rcx, [rsp+30h]
 PAGE:FFFFF800188CD316                 call    sub_FFFFF800188C4214 // <- Here
 PAGE:FFFFF800188CD31B                 jmp     loc_FFFFF800188CD21C
 ```
+
+## A Way of Read/Write Kernel Memory
+
+We can see so many IOCTL commands and the `MHYPROT_IOCTL_READ_KERNEL_MEMORY` what I defined in [mhyprot.hpp](src/mhyprot.hpp) can be found as follows:
+
+```cpp
+PAGE:FFFFF800188CD7A9 loc_FFFFF800188CD7A9:                   ; CODE XREF: sub_FFFFF800188CD6E0+BA↑j
+PAGE:FFFFF800188CD7A9                 cmp     ecx, 83064000h  ; MHYPROT_IOCTL_READ_KERNEL_MEMORY
+PAGE:FFFFF800188CD7AF                 jnz     short loc_FFFFF800188CD7C8
+PAGE:FFFFF800188CD7B1                 mov     rdx, [rdi]
+PAGE:FFFFF800188CD7B4                 lea     rcx, [rdi+4]
+PAGE:FFFFF800188CD7B8                 mov     r8d, [rdi+8]
+PAGE:FFFFF800188CD7BC                 call    sub_FFFFF800188C63A8
+```
+
+Here is the ioctl handlers:
+
+![IMAGE](image02.png)
