@@ -160,6 +160,6 @@ but I can still easily find the function that registered at `DriverObject->Major
 
 As mhyprot imports `IofCompleteRequest` then go xrefs, and there we go.  
   
-Here is the ioctl handlers:
+Here is the ioctl handlers, found the `0x83064000`(`MHYPROT_IOCTL_READ_KERNEL_MEMORY`) as `cmp     ecx, 83064000h` and some other ioctl codes as follows:
 
 ![IMAGE](image02.png)
