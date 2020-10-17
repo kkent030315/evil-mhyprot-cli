@@ -100,7 +100,7 @@ PAGE:FFFFF800188CD94C                 call    sub_FFFFF800188C301C // <-
 PAGE:FFFFF800188CD951                 mov     ebx, 7
 ```
 
-and the `sub_FFFFF800188C301C`([sub_FFFFF800188CD6E0#L196](https://github.com/kkent030315/evil-mhyprot-cli/blob/main/IDA/sub_FFFFF800188CD6E0.txt#L196)) is look like:
+and the `sub_FFFFF800188C301C` is look like:
 
 ```cpp
 .text:FFFFF800188C301C ; =============== S U B R O U T I N E =======================================
