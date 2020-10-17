@@ -76,7 +76,7 @@ I will keep update if I found more another subroutine.
 
 ## Driver Initialization
 
-The `MHYPROT_IOCTL_INITIALIZE` what I defined in [mhyprot.hpp](src/mhyprot.hpp#L18) can be found as follows:
+The `MHYPROT_IOCTL_INITIALIZE` what I defined in [mhyprot.hpp#L18](src/mhyprot.hpp#L18) can be found as follows:
 
 ```cpp
 PAGE:FFFFF800188CD8FD loc_FFFFF800188CD8FD:                   ; CODE XREF: sub_FFFFF800188CD6E0+213↑j
@@ -100,7 +100,7 @@ PAGE:FFFFF800188CD94C                 call    sub_FFFFF800188C301C // <-
 PAGE:FFFFF800188CD951                 mov     ebx, 7
 ```
 
-and the `sub_FFFFF800188C301C` is look like:
+and the `sub_FFFFF800188C301C`([sub_FFFFF800188CD6E0#L196](https://github.com/kkent030315/evil-mhyprot-cli/blob/main/IDA/sub_FFFFF800188CD6E0.txt#L196)) is look like:
 
 ```cpp
 .text:FFFFF800188C301C ; =============== S U B R O U T I N E =======================================
