@@ -194,7 +194,7 @@ PAGE:FFFFF800188CD8F8                 jmp     loc_FFFFF800188CDA4F
 PAGE:FFFFF800188CD8FD ; ---------------------------------------------------------------------------
 PAGE:FFFFF800188CD8FD
 PAGE:FFFFF800188CD8FD loc_FFFFF800188CD8FD:                   ; CODE XREF: sub_FFFFF800188CD6E0+213↑j
-PAGE:FFFFF800188CD8FD                 cmp     ecx, 80034000h
+PAGE:FFFFF800188CD8FD                 cmp     ecx, 80034000h  ; MHYPROT_IOCTL_INITIALIZE
 PAGE:FFFFF800188CD903                 jnz     short loc_FFFFF800188CD984
 PAGE:FFFFF800188CD905                 cmp     r8d, 10h
 PAGE:FFFFF800188CD909                 jnz     loc_FFFFF800188CDA4F
