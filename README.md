@@ -35,6 +35,11 @@ Investigating
 - Any version of Windows x64 that the driver works on
 - Administrator privilege does not required if the service already running
 
+Tested on:
+
+- Windows10 x64 1903
+- Windows7 x64 6.1
+
 # Usage
 
 ```
