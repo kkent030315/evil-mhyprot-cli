@@ -74,6 +74,90 @@ I've added it to [this repo](IDA) as binary since it's too big.
 
 I will keep update if I found more another subroutine.
 
+## Driver Initialization
+
+The `MHYPROT_IOCTL_INITIALIZE` what I defined in [mhyprot.hpp](src/mhyprot.hpp#L18) can be found as follows:
+
+```cpp
+PAGE:FFFFF800188CD8FD loc_FFFFF800188CD8FD:                   ; CODE XREF: sub_FFFFF800188CD6E0+213↑j
+PAGE:FFFFF800188CD8FD                 cmp     ecx, 80034000h  ; MHYPROT_IOCTL_INITIALIZE
+PAGE:FFFFF800188CD903                 jnz     short loc_FFFFF800188CD984
+PAGE:FFFFF800188CD905                 cmp     r8d, 10h
+PAGE:FFFFF800188CD909                 jnz     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD90F                 mov     rax, 0EBBAAEF4FFF89042h // <- _m_002
+PAGE:FFFFF800188CD919                 xor     [rdi+8], rax
+PAGE:FFFFF800188CD91D                 mov     rax, [rdi+8]
+PAGE:FFFFF800188CD921                 xor     [rdi], rax
+PAGE:FFFFF800188CD924                 cmp     dword ptr [rdi+4], 0BAEBAEECh // <- _m_001
+PAGE:FFFFF800188CD92B                 jnz     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD931                 mov     ecx, [rdi]
+PAGE:FFFFF800188CD933                 call    sub_FFFFF800188C51A8
+PAGE:FFFFF800188CD938                 cmp     dword ptr cs:qword_FFFFF800188CA108, 0
+PAGE:FFFFF800188CD93F                 jnz     short loc_FFFFF800188CD97D
+PAGE:FFFFF800188CD941                 mov     rdx, [rdi+8]
+PAGE:FFFFF800188CD945                 lea     rcx, xmmword_FFFFF800188CA0E8
+PAGE:FFFFF800188CD94C                 call    sub_FFFFF800188C301C // <-
+PAGE:FFFFF800188CD951                 mov     ebx, 7
+```
+
+and the `sub_FFFFF800188C301C` is look like:
+
+```cpp
+.text:FFFFF800188C301C ; =============== S U B R O U T I N E =======================================
+.text:FFFFF800188C301C
+.text:FFFFF800188C301C
+.text:FFFFF800188C301C sub_FFFFF800188C301C proc near          ; CODE XREF: sub_FFFFF800188CD6E0+26C↓p
+.text:FFFFF800188C301C                                         ; DATA XREF: .upx0:FFFFF800189F2BA8↓o
+.text:FFFFF800188C301C
+.text:FFFFF800188C301C arg_0           = qword ptr  8
+.text:FFFFF800188C301C
+.text:FFFFF800188C301C                 test    rcx, rcx
+.text:FFFFF800188C301F                 jz      locret_FFFFF800188C30B4
+.text:FFFFF800188C3025                 mov     [rsp+arg_0], rbx
+.text:FFFFF800188C302A                 push    rdi
+.text:FFFFF800188C302B                 sub     rsp, 20h
+.text:FFFFF800188C302F                 xor     eax, eax
+.text:FFFFF800188C3031                 mov     rdi, rdx
+.text:FFFFF800188C3034                 mov     [rcx], rax
+.text:FFFFF800188C3037                 mov     rbx, rcx
+.text:FFFFF800188C303A                 mov     [rcx+8], rax
+.text:FFFFF800188C303E                 mov     edx, 9C0h       ; NumberOfBytes
+.text:FFFFF800188C3043                 xor     ecx, ecx        ; PoolType
+.text:FFFFF800188C3045                 call    cs:ExAllocatePool
+.text:FFFFF800188C304B                 xor     edx, edx
+.text:FFFFF800188C304D                 mov     r8d, 9C0h
+.text:FFFFF800188C3053                 mov     rcx, rax
+.text:FFFFF800188C3056                 mov     [rbx], rax
+.text:FFFFF800188C3059                 call    sub_FFFFF800188C7900
+.text:FFFFF800188C305E                 mov     rax, [rbx]
+.text:FFFFF800188C3061                 mov     r9d, 1
+.text:FFFFF800188C3067                 mov     [rbx+0Ch], r9d
+.text:FFFFF800188C306B                 mov     [rax], rdi
+.text:FFFFF800188C306E                 mov     [rbx+8], r9d
+.text:FFFFF800188C3072
+.text:FFFFF800188C3072 loc_FFFFF800188C3072:                   ; CODE XREF: sub_FFFFF800188C301C+8C↓j
+.text:FFFFF800188C3072                 movsxd  r8, dword ptr [rbx+8]
+.text:FFFFF800188C3076                 mov     rdx, [rbx]
+.text:FFFFF800188C3079                 mov     rax, [rdx+r8*8-8]
+.text:FFFFF800188C307E                 mov     rcx, rax
+.text:FFFFF800188C3081                 shr     rcx, 3Eh
+.text:FFFFF800188C3085                 xor     rcx, rax
+.text:FFFFF800188C3088                 mov     rax, 5851F42D4C957F2Dh
+.text:FFFFF800188C3092                 imul    rcx, rax
+.text:FFFFF800188C3096                 add     rcx, r8
+.text:FFFFF800188C3099                 mov     [rdx+r8*8], rcx
+.text:FFFFF800188C309D                 add     [rbx+8], r9d
+.text:FFFFF800188C30A1                 cmp     dword ptr [rbx+8], 138h
+.text:FFFFF800188C30A8                 jl      short loc_FFFFF800188C3072
+.text:FFFFF800188C30AA                 mov     rbx, [rsp+28h+arg_0]
+.text:FFFFF800188C30AF                 add     rsp, 20h
+.text:FFFFF800188C30B3                 pop     rdi
+.text:FFFFF800188C30B4
+.text:FFFFF800188C30B4 locret_FFFFF800188C30B4:                ; CODE XREF: sub_FFFFF800188C301C+3↑j
+.text:FFFFF800188C30B4                 retn
+.text:FFFFF800188C30B4 sub_FFFFF800188C301C endp
+```
+
 ## A Way of Read/Write Specific Process Memory
 
 The mhyprot calls `MmCopyVirtualMemory` eventually as wrapper defined as follows:
@@ -160,7 +244,7 @@ PAGE:FFFFF800188CD31B                 jmp     loc_FFFFF800188CD21C
 
 ## A Way of Read/Write Kernel Memory
 
-We can see so many IOCTL commands and the `MHYPROT_IOCTL_READ_KERNEL_MEMORY` what I defined in [mhyprot.hpp](src/mhyprot.hpp) can be found as follows:
+We can see so many IOCTL commands and the `MHYPROT_IOCTL_READ_KERNEL_MEMORY` what I defined in [mhyprot.hpp](src/mhyprot.hpp#L19) can be found as follows:
 
 ```cpp
 PAGE:FFFFF800188CD7A9 loc_FFFFF800188CD7A9:                   ; CODE XREF: sub_FFFFF800188CD6E0+BA↑j
