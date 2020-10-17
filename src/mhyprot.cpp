@@ -236,7 +236,7 @@ void mhyprot::driver_impl::encrypt_payload(void* payload, size_t size)
 {
     if (size % 8)
     {
-        logger::log("[!] (payload) data size must be 8-byte alignment");
+        logger::log("[!] (payload) size must be 8-byte alignment");
         return;
     }
 
