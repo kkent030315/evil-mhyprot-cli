@@ -152,6 +152,14 @@ PAGE:FFFFF800188CD7B8                 mov     r8d, [rdi+8]
 PAGE:FFFFF800188CD7BC                 call    sub_FFFFF800188C63A8
 ```
 
+Since around ioctl functions and its functionalities are packed, reverse engineering is not easy than average.  
+but I can still easily find the function that registered at `DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]` since the IOCTL handler must have `IoCompleteRequest` or like `IofCompleteRequest` that exported by `ntoskrnl`.  
+(`IoCompleteRequest` is a wrapper of `IofCompleteRequest`)  
+
+![IMAGE](image03.png)
+
+As mhyprot imports `IofCompleteRequest` then go xrefs, and there we go.  
+  
 Here is the ioctl handlers:
 
 ![IMAGE](image02.png)
