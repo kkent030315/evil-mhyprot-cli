@@ -149,7 +149,41 @@ PAGE:FFFFF800188CD7AF                 jnz     short loc_FFFFF800188CD7C8
 PAGE:FFFFF800188CD7B1                 mov     rdx, [rdi]
 PAGE:FFFFF800188CD7B4                 lea     rcx, [rdi+4]
 PAGE:FFFFF800188CD7B8                 mov     r8d, [rdi+8]
-PAGE:FFFFF800188CD7BC                 call    sub_FFFFF800188C63A8
+PAGE:FFFFF800188CD7BC                 call    sub_FFFFF800188C63A8 // <-
+```
+
+And the `sub_FFFFF800188C63A8` is like:
+
+```cpp
+.text:FFFFF800188C63A8 sub_FFFFF800188C63A8 proc near          ; CODE XREF: sub_FFFFF800188CD6E0+DC↓p
+.text:FFFFF800188C63A8                                         ; DATA XREF: .upx0:FFFFF800189F2EE4↓o
+.text:FFFFF800188C63A8
+.text:FFFFF800188C63A8 arg_0           = qword ptr  8
+.text:FFFFF800188C63A8 arg_8           = qword ptr  10h
+.text:FFFFF800188C63A8
+.text:FFFFF800188C63A8                 mov     [rsp+arg_0], rbx
+.text:FFFFF800188C63AD                 mov     [rsp+arg_8], rsi
+.text:FFFFF800188C63B2                 push    rdi
+.text:FFFFF800188C63B3                 sub     rsp, 20h
+.text:FFFFF800188C63B7                 mov     edi, r8d
+.text:FFFFF800188C63BA                 mov     rbx, rdx
+.text:FFFFF800188C63BD                 mov     rsi, rcx
+.text:FFFFF800188C63C0                 test    rdx, rdx
+.text:FFFFF800188C63C3                 jz      short loc_FFFFF800188C63F2
+.text:FFFFF800188C63C5                 test    r8d, r8d
+.text:FFFFF800188C63C8                 jz      short loc_FFFFF800188C63F2
+.text:FFFFF800188C63CA                 mov     rax, cs:MmHighestUserAddress
+.text:FFFFF800188C63D1                 cmp     rdx, [rax]
+.text:FFFFF800188C63D4                 jb      short loc_FFFFF800188C63F2
+.text:FFFFF800188C63D6                 mov     r8d, edi
+.text:FFFFF800188C63D9                 xor     edx, edx
+.text:FFFFF800188C63DB                 call    sub_FFFFF800188C7900
+.text:FFFFF800188C63E0                 mov     r8d, edi
+.text:FFFFF800188C63E3                 mov     rdx, rsi
+.text:FFFFF800188C63E6                 mov     rcx, rbx
+.text:FFFFF800188C63E9                 call    sub_FFFFF800188C3DD8
+.text:FFFFF800188C63EE                 xor     eax, eax
+.text:FFFFF800188C63F0                 jmp     short loc_FFFFF800188C63F5
 ```
 
 Since around ioctl functions and its functionalities are packed, reverse engineering is not easy than average.  
