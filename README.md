@@ -244,7 +244,7 @@ PAGE:FFFFF800188CD31B                 jmp     loc_FFFFF800188CD21C
 
 ## A Way of Read/Write Kernel Memory
 
-We can see so many IOCTL commands and the `MHYPROT_IOCTL_READ_KERNEL_MEMORY` what I defined in [mhyprot.hpp](src/mhyprot.hpp#L19) can be found as follows:
+We can see so many IOCTL commands and the `MHYPROT_IOCTL_READ_KERNEL_MEMORY` what I defined in [mhyprot.hpp#L19](src/mhyprot.hpp#L19) can be found as follows:
 
 ```cpp
 PAGE:FFFFF800188CD7A9 loc_FFFFF800188CD7A9:                   ; CODE XREF: sub_FFFFF800188CD6E0+BA↑j
