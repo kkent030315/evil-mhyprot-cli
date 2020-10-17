@@ -54,6 +54,26 @@ following options are available as of now:
 > The document(s) below is still in write
 so please forgive any mistakes I took in advance.
 
+## IOCTL Handler Functions
+
+So what I did is that to reverse engineering around IOCTL handling functionalities.  
+
+Since around ioctl functions and its functionalities are packed, to reverse engineering is not easy than average.  
+but I can still easily find the function that registered at `DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]` since the IOCTL handler must have an `IoCompleteRequest` or like `IofCompleteRequest` that exported by `ntoskrnl`.  
+(Btw `IoCompleteRequest` is just a wrapper of `IofCompleteRequest`)  
+
+![IMAGE](image03.png)
+
+As mhyprot imports `IofCompleteRequest` then go xrefs, and we will see there are many ioctl handlers.  
+Concretely, I found two big subroutine in packed segment.  
+
+I've added it to [this repo](IDA) as binary since it's too big.  
+
+- [sub_FFFFF800188CD000](IDA/sub_FFFFF800188CD000.txt)
+- [sub_FFFFF800188CD6E0](IDA/sub_FFFFF800188CD6E0.txt)
+
+I will keep update if I found more another subroutine.
+
 ## A Way of Read/Write Specific Process Memory
 
 The mhyprot calls `MmCopyVirtualMemory` eventually as wrapper defined as follows:
@@ -185,14 +205,6 @@ And the `sub_FFFFF800188C63A8` is like:
 .text:FFFFF800188C63EE                 xor     eax, eax
 .text:FFFFF800188C63F0                 jmp     short loc_FFFFF800188C63F5
 ```
-
-Since around ioctl functions and its functionalities are packed, reverse engineering is not easy than average.  
-but I can still easily find the function that registered at `DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]` since the IOCTL handler must have `IoCompleteRequest` or like `IofCompleteRequest` that exported by `ntoskrnl`.  
-(`IoCompleteRequest` is a wrapper of `IofCompleteRequest`)  
-
-![IMAGE](image03.png)
-
-As mhyprot imports `IofCompleteRequest` then go xrefs, and there we go.  
   
 Here is the ioctl handlers, found the `0x83064000`(`MHYPROT_IOCTL_READ_KERNEL_MEMORY`) as `cmp     ecx, 83064000h` and some another ioctl codes as follows:
 
