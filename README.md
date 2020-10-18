@@ -250,6 +250,10 @@ PAGE:FFFFF800188CD316                 call    sub_FFFFF800188C4214 // <- Here
 PAGE:FFFFF800188CD31B                 jmp     loc_FFFFF800188CD21C
 ```
 
+Call map:
+
+![IMAGE](image06.png)
+
 ## A Way of Read/Write Kernel Memory
 
 We can see so many IOCTL commands and the `MHYPROT_IOCTL_READ_KERNEL_MEMORY` what I defined in [mhyprot.hpp#L19](src/mhyprot.hpp#L19) can be found as follows:
