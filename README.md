@@ -256,7 +256,7 @@ Call map:
 
 ![IMAGE](image06.png)
 
-## A Way of Read/Write Kernel Memory
+## A Way of Read Kernel Memory
 
 We can see so many IOCTL commands and the `MHYPROT_IOCTL_READ_KERNEL_MEMORY` what I defined in [mhyprot.hpp#L19](src/mhyprot.hpp#L19) can be found as follows:
 
@@ -304,6 +304,13 @@ And the `sub_FFFFF800188C63A8` is like:
 .text:FFFFF800188C63F0                 jmp     short loc_FFFFF800188C63F5
 ```
   
-Here is the ioctl handlers, found the `0x83064000`(`MHYPROT_IOCTL_READ_KERNEL_MEMORY`) as `cmp     ecx, 83064000h` and some another ioctl codes as follows:
+Here is the ioctl handlers, found the `0x83064000`(`MHYPROT_IOCTL_READ_KERNEL_MEMORY`) as `cmp ecx, 83064000h` and some another ioctl codes as follows:
 
 ![IMAGE](image02.png)
+
+Call map:  
+  
+As I defined as `DWORD result` in [mhyprot.hpp#L40](https://github.com/kkent030315/evil-mhyprot-cli/blob/main/src/mhyprot.hpp#L40) the first 4bytes is result.  
+I can guess it's a `NTSTATUS` as it typedef'ed as `typedef LONG NTSTATUS` natively and the dispathers return types are `NTSTATUS` and the result will directly be got stored from it.
+
+![IMAGE](image07.png)
