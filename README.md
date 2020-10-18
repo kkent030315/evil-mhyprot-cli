@@ -1,5 +1,6 @@
 ![IMAGE](image01.png)
 ![IMAGE](image04.png)
+![IMAGE](image05.png)
 
 # evil-mhyprot-cli
 A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in kernel/user from usermode.
@@ -39,6 +40,7 @@ Tested on:
 
 - Windows10 x64 1903
 - Windows7 x64 6.1
+- Windows8.1 x64 6.3
 
 # Usage
 
