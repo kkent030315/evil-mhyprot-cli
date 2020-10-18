@@ -78,7 +78,9 @@ Concretely, I found two big subroutine in packed segment.
 I've added it to [this repo](IDA) as binary since it's too big.  
 
 - [sub_FFFFF800188CD000](IDA/sub_FFFFF800188CD000.txt)
+  - -> [Pseudocode](https://github.com/kkent030315/evil-mhyprot-cli/blob/main/IDA/FUN_0001d000.cpp)
 - [sub_FFFFF800188CD6E0](IDA/sub_FFFFF800188CD6E0.txt)
+  - -> [Pseudocode](https://github.com/kkent030315/evil-mhyprot-cli/blob/main/IDA/FUN_0001d6e0.cpp)
 
 I will keep update if I found more another subroutine.
 
