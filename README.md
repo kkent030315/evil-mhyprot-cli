@@ -256,6 +256,12 @@ Call map:
 
 ![IMAGE](image06.png)
 
+### Proof
+
+I have confirmed that by simply hooking mhyprot kernel module:
+
+![IMAGE](image08.png)
+
 ## A Way of Read Kernel Memory
 
 We can see so many IOCTL commands and the `MHYPROT_IOCTL_READ_KERNEL_MEMORY` what I defined in [mhyprot.hpp#L19](src/mhyprot.hpp#L19) can be found as follows:
