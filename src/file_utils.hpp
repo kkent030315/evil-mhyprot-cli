@@ -30,5 +30,7 @@
 
 namespace file_utils
 {
-	bool create_file_from_buffer(const std::string_view file_path, void* buffer, size_t size);
+	bool create_file_from_buffer(
+		const std::string_view file_path, void* buffer, const size_t size
+	);
 }
