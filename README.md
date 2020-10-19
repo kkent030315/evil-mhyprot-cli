@@ -495,3 +495,8 @@ What we need is:
 - 2. Send the payload with the ioctl code `0x82054000`
 - 3. Check for the first 4byte
 
+### Proof
+
+I've hooked some part of mhyprot kernel module, especially `PsGetProcessPEB` and `PsLookupProcessByProcessId` and confirmed.
+
+![IMAGE](IDA/imgs/image11.png)
