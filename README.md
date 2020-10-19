@@ -389,6 +389,8 @@ typedef struct _LDR_MODULE {
 } LDR_MODULE, *PLDR_MODULE;
 ```
 
+And the function pseudocode is like:
+
 ```cpp
 __int64 __fastcall sub_FFFFF800188C27D4(
   __int64 a1,       // pEPROCESS
@@ -414,12 +416,12 @@ __int64 __fastcall sub_FFFFF800188C27D4(
       if ( v19 )
       {
         for ( j = *(__int64 **)(v19 + 16);
-              j != (__int64 *)(*(_QWORD *)(v18 + 24) + 16i64); // PEB->Ldr(24)->InMemoryOrderModuleList.Flink
+              j != (__int64 *)(*(_QWORD *)(v18 + 24) + 16i64); // PEB->Ldr->InMemoryOrderModuleList.Flink
               j = (__int64 *)*j )
         {
           if ( v7 < v3 ) // if the counter less than a number what we want to get
           {
-            v21 = 928i64 * v7; // I confirmed that the output structure is 0x3A0 alignment
+            v21 = 928i64 * v7; // [IMPORTANT] we can see output structure is 0x3A0 alignment
             sub_FFFFF800188C7900(v21 + v4 + 12, 0i64, 256i64); // fill memory by 0 sizeof 0x100
             sub_FFFFF800188C7900(v21 + v4 + 268, 0i64, 520i64); // fill memory by 0 sizeof 0x208
             *(_QWORD *)(v21 + v4) = j[6];
@@ -428,23 +430,41 @@ __int64 __fastcall sub_FFFFF800188C27D4(
             v23 = 127i64;
             if ( v22 <= 0x7Fu )
               v23 = v22;
-            sub_FFFFF800188C75C0(v21 + v4 + 12, j[12], v23); // copy to the buffer
+            sub_FFFFF800188C75C0(v21 + v4 + 12, j[12], v23); // copy BaseDllName to the buffer
             v24 = *((_WORD *)j + 36);
             v25 = v24;
             if ( v24 > 0x103u )
               v25 = 259i64;
-            sub_FFFFF800188C75C0(v21 + v4 + 268, j[10], v25); // copy to the buffer
+            sub_FFFFF800188C75C0(v21 + v4 + 268, j[10], v25); // copy FullDllName to the buffer
             *(_QWORD *)(v21 + v4 + 792) = *((unsigned int *)j + 32);
             v3 = v32;
           }
-          ++v6;
-          ++v7;
+          ++v6; // counter
+          ++v7; // counter
         }
       }
     }
-  }
-  else { /* 32-bit PEB (Redacted) */ }
-  KeUnstackDetachProcess(&v30);
+  } else { ... /* 32-bit PEB (Redacted) */ }
+  KeUnstackDetachProcess(&v30); // detach
   return v6;
 }
+```
+
+We got a much information from it as follows:
+
+- We can get `BaseDllName` and `FullDllName` using this ioctl command
+- What we need is only `ProcessId` and `MaxCount`
+- The output buffer will overrided in the request buffer
+- The output buffer also must have `0x3A0` size alignment per module
+
+Now lets time to code, as we define structure for the payload:
+
+(This is defined in [mhyprot.hpp#L62](https://github.com/kkent030315/evil-mhyprot-cli/blob/main/src/mhyprot.hpp#L62) as well.)
+
+```cpp
+typedef struct _MHYPROT_ENUM_PROCESS_MODULES_REQUEST
+{
+	uint32_t process_id;
+	uint32_t max_count;
+} MHYPROT_ENUM_PROCESS_MODULES_REQUEST, * PMHYPROT_ENUM_PROCESS_MODULES_REQUEST;
 ```
