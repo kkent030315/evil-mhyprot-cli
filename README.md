@@ -7,6 +7,10 @@ A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in ker
 
 ### Static Library is here: [libmhyprot](https://github.com/kkent030315/libmhyprot)
 
+# Updates
+
+- 10/19/2020 implemented module eunmeration command and its doc
+
 # Overview
 
 What we can do with this CLI is as follows:
