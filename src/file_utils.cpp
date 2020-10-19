@@ -37,12 +37,12 @@ bool file_utils::create_file_from_buffer(
         std::ios_base::out | std::ios_base::binary
     );
 
-	if (!stream.write(reinterpret_cast<char*>(buffer), size))
-	{
-		stream.close();
-		return false;
-	}
+    if (!stream.write(reinterpret_cast<char*>(buffer), size))
+    {
+        stream.close();
+        return false;
+    }
 
-	stream.close();
-	return true;
+    stream.close();
+    return true;
 }
