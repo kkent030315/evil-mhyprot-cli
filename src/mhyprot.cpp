@@ -379,8 +379,14 @@ bool mhyprot::driver_impl::get_process_modules(
     //
     const size_t payload_context_size = static_cast<uint64_t>(max_count) * MHYPROT_ENUM_PROCESS_MODULE_SIZE;
 
+    //
+    // payload buffer must have additional size to get result(s)
+    //
     const size_t alloc_size = sizeof(MHYPROT_ENUM_PROCESS_MODULES_REQUEST) + payload_context_size;
 
+    //
+    // allocate memory
+    //
     PMHYPROT_ENUM_PROCESS_MODULES_REQUEST payload =
         (PMHYPROT_ENUM_PROCESS_MODULES_REQUEST)calloc(1, alloc_size);
 
@@ -407,6 +413,9 @@ bool mhyprot::driver_impl::get_process_modules(
         return false;
     }
 
+    //
+    // result(s) are @ + 0x2
+    //
     const void* payload_context = reinterpret_cast<void*>(payload + 0x2);
 
     for (uint64_t offset = 0x0;
