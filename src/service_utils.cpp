@@ -56,15 +56,54 @@ SC_HANDLE service_utils::create_service(const std::string_view driver_path)
     {
         const auto last_error = GetLastError();
 
-        if (last_error == ERROR_SERVICE_EXISTS)
+        if (last_error == ERROR_SERVICE_EXISTS ||
+            last_error == ERROR_SERVICE_MARKED_FOR_DELETE ||
+            last_error == ERROR_SERVICE_ALREADY_RUNNING)
         {
-            logger::log("[+] the service already exists, open handle\n");
-
-            return OpenService(
+            mhyprot_service_handle = OpenService(
                 sc_manager_handle,
                 MHYPROT_SERVICE_NAME,
                 SERVICE_START | SERVICE_STOP | DELETE
             );
+
+            if (!CHECK_HANDLE(mhyprot_service_handle))
+            {
+                CloseServiceHandle(sc_manager_handle);
+                return (SC_HANDLE)(INVALID_HANDLE_VALUE);
+            }
+
+            SERVICE_STATUS status;
+
+            if (!QueryServiceStatus(mhyprot_service_handle, &status))
+            {
+                CloseServiceHandle(sc_manager_handle);
+                CloseServiceHandle(mhyprot_service_handle);
+                logger::log("[!] failed to query service status\n");
+                return (SC_HANDLE)(INVALID_HANDLE_VALUE);
+            }
+
+            if (status.dwCurrentState == SERVICE_STOPPED)
+            {
+                if (!start_service(mhyprot_service_handle))
+                {
+                    CloseServiceHandle(sc_manager_handle);
+                    CloseServiceHandle(mhyprot_service_handle);
+                    logger::log("[!] failed to start exist service\n");
+                    return (SC_HANDLE)(INVALID_HANDLE_VALUE);
+                }
+
+                logger::log("[+] exist service successfully started.\n");
+            }
+            else if (status.dwCurrentState != SERVICE_RUNNING)
+            {
+                CloseServiceHandle(sc_manager_handle);
+                CloseServiceHandle(mhyprot_service_handle);
+                logger::log("[=] the service %s is not running or stopped.\n[=] please take action manually.\n");
+                return (SC_HANDLE)(INVALID_HANDLE_VALUE);
+            }
+
+            CloseServiceHandle(sc_manager_handle);
+            return mhyprot_service_handle;
         }
 
         logger::log("[!] failed to create %s service. (0x%lX)\n", MHYPROT_SERVICE_NAME, GetLastError());
@@ -81,7 +120,9 @@ SC_HANDLE service_utils::create_service(const std::string_view driver_path)
 // delete the service
 // sc delete myservice
 //
-bool service_utils::delete_service(SC_HANDLE service_handle, bool close_on_fail, bool close_on_success)
+bool service_utils::delete_service(
+    SC_HANDLE service_handle, bool close_on_fail, bool close_on_success
+)
 {
     SC_HANDLE sc_manager_handle = open_sc_manager();
 
