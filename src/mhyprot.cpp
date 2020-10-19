@@ -377,9 +377,9 @@ bool mhyprot::driver_impl::get_process_modules(
     //
     // return is 0x3A0 alignment
     //
-    const size_t payload_body_size = static_cast<uint64_t>(max_count) * MHYPROT_ENUM_PROCESS_MODULE_SIZE;
+    const size_t payload_context_size = static_cast<uint64_t>(max_count) * MHYPROT_ENUM_PROCESS_MODULE_SIZE;
 
-    const size_t alloc_size = sizeof(MHYPROT_ENUM_PROCESS_MODULES_REQUEST) + payload_body_size;
+    const size_t alloc_size = sizeof(MHYPROT_ENUM_PROCESS_MODULES_REQUEST) + payload_context_size;
 
     PMHYPROT_ENUM_PROCESS_MODULES_REQUEST payload =
         (PMHYPROT_ENUM_PROCESS_MODULES_REQUEST)calloc(1, alloc_size);
@@ -410,7 +410,7 @@ bool mhyprot::driver_impl::get_process_modules(
     const void* payload_context = reinterpret_cast<void*>(payload + 0x2);
 
     for (uint64_t offset = 0x0;
-        offset < payload_body_size;
+        offset < payload_context_size;
         offset += MHYPROT_ENUM_PROCESS_MODULE_SIZE)
     {
         const std::wstring module_name = reinterpret_cast<wchar_t*>((uint64_t)payload_context + offset);
