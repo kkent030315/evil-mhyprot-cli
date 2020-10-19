@@ -468,3 +468,26 @@ typedef struct _MHYPROT_ENUM_PROCESS_MODULES_REQUEST
 	uint32_t max_count;
 } MHYPROT_ENUM_PROCESS_MODULES_REQUEST, * PMHYPROT_ENUM_PROCESS_MODULES_REQUEST;
 ```
+
+By:
+
+```cpp
+if (uVar1_ControlCode == 0x82054000) {
+	uVar6 = GetModuleListByProcessId_FUN_000126d0
+		(*(uint *)puVar3_RequestContext, 				// process id
+		(longlong)(uint *)((longlong)puVar3_RequestContext + 4), 	// out buffer, the output will be stored with overriding max count...
+		*(uint *)((longlong)puVar3_RequestContext + 4) 			// max count
+		);
+	iVar3 = (int)uVar6;
+}
+...
+// mhyprot overrides first 4byte of the payload buffer to identify success or fail
+*(int *)puVar3_RequestContext = iVar3;
+```
+
+What we need is:
+
+- 1. Allocate memory for payload and its result, `0x3A0` * `MaxCount`
+- 2. Send the payload with the ioctl code `0x82054000`
+- 3. Check if the first 4byte is overrided or not
+
