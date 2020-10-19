@@ -170,7 +170,7 @@ bool mhyprot::driver_impl::driver_init(bool debug_prints, bool print_seeds)
     // driver's base address in the system
     //
     uint64_t mhyprot_address = win_utils::
-        obtain_sysmodule_address(MHYPROT_SYSFILE_NAME, debug_prints);
+        find_sysmodule_address_by_name(MHYPROT_SYSFILE_NAME, debug_prints);
 
     if (!mhyprot_address)
     {

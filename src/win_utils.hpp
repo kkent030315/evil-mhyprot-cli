@@ -16,6 +16,5 @@ namespace win_utils
 
 	uint32_t find_process_id(const std::string_view process_name);
 	uint64_t find_base_address(const uint32_t process_id);
-
-	uint64_t obtain_sysmodule_address(const std::string_view target_module_name, bool debug_prints = false);
+	uint64_t find_sysmodule_address_by_name(const std::string_view target_module_name, bool debug_prints = false);
 }
