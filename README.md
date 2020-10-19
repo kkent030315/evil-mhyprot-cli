@@ -11,6 +11,8 @@ A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in ker
 
 - 10/19/2020 implemented module eunmeration command and its doc
 
+![IMAGE](image09.png)
+
 # Overview
 
 What we can do with this CLI is as follows:
