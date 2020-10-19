@@ -384,11 +384,17 @@ bool mhyprot::driver_impl::get_process_modules(
     PMHYPROT_ENUM_PROCESS_MODULES_REQUEST payload =
         (PMHYPROT_ENUM_PROCESS_MODULES_REQUEST)calloc(1, alloc_size);
 
+    if (!payload)
+    {
+        return false;
+    }
+
     payload->process_id = process_id;   // target process id
     payload->max_count = max_count;     // max module count to lookup
 
     if (!request_ioctl(MHYPROT_IOCTL_ENUM_PROCESS_MODULES, payload, alloc_size))
     {
+        free(payload);
         return false;
     }
 
