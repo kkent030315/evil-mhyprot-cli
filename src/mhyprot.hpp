@@ -105,8 +105,7 @@ namespace mhyprot
 		}
 
 		bool get_process_modules(
-			uint32_t process_id,
-			uint32_t max_count,
+			uint32_t process_id, uint32_t max_count,
 			std::vector< std::pair<std::wstring, std::wstring> >& result
 		);
 	}

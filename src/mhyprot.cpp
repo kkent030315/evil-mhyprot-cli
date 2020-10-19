@@ -340,7 +340,10 @@ bool mhyprot::driver_impl::write_user_memory(
     );
 }
 
-bool mhyprot::driver_impl::get_process_modules(uint32_t process_id, uint32_t max_count, std::vector<std::pair<std::wstring, std::wstring>>& result)
+bool mhyprot::driver_impl::get_process_modules(
+    uint32_t process_id, uint32_t max_count,
+    std::vector<std::pair<std::wstring, std::wstring>>& result
+)
 {
     //
     // return is 0x3A0 alignment
