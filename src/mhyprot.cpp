@@ -285,7 +285,9 @@ void mhyprot::driver_impl::encrypt_payload(void* payload, size_t size)
 //
 // read memory from the kernel using vulnerable ioctl
 //
-bool mhyprot::driver_impl::read_kernel_memory(uint64_t address, void* buffer, size_t size)
+bool mhyprot::driver_impl::read_kernel_memory(
+    const uint64_t address, void* buffer, const size_t size
+)
 {
     if (!buffer)
     {
@@ -322,7 +324,8 @@ bool mhyprot::driver_impl::read_kernel_memory(uint64_t address, void* buffer, si
 // let the driver to execute MmCopyVirtualMemory
 //
 bool mhyprot::driver_impl::read_user_memory(
-    uint32_t process_id, uint64_t address, void* buffer, size_t size
+    const uint32_t process_id,
+    const uint64_t address, void* buffer, const size_t size
 )
 {
     MHYPROT_USER_READ_WRITE_REQUEST payload;
@@ -346,7 +349,8 @@ bool mhyprot::driver_impl::read_user_memory(
 // let the driver to execute MmCopyVirtualMemory
 //
 bool mhyprot::driver_impl::write_user_memory(
-    uint32_t process_id, uint64_t address, void* buffer, size_t size
+    const uint32_t process_id,
+    const uint64_t address, void* buffer, const size_t size
 )
 {
     MHYPROT_USER_READ_WRITE_REQUEST payload;
@@ -366,7 +370,7 @@ bool mhyprot::driver_impl::write_user_memory(
 }
 
 bool mhyprot::driver_impl::get_process_modules(
-    uint32_t process_id, uint32_t max_count,
+    const uint32_t process_id, const uint32_t max_count,
     std::vector<std::pair<std::wstring, std::wstring>>& result
 )
 {

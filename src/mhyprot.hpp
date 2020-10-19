@@ -107,30 +107,30 @@ namespace mhyprot
 		uint64_t generate_key(uint64_t seed);
 		void encrypt_payload(void* payload, size_t size);
 
-		bool read_kernel_memory(uint64_t address, void* buffer, size_t size);
-		template<class T> __forceinline T read_kernel_memory(uint64_t address)
+		bool read_kernel_memory(const uint64_t address, void* buffer, const size_t size);
+		template<class T> __forceinline T read_kernel_memory(const uint64_t address)
 		{
 			T buffer;
 			read_kernel_memory(address, &buffer, sizeof(T));
 			return buffer;
 		}
 
-		bool read_user_memory(uint32_t process_id, uint64_t address, void* buffer, size_t size);
-		template<class T> __forceinline T read_user_memory(uint32_t process_id, uint64_t address)
+		bool read_user_memory(const uint32_t process_id, const uint64_t address, void* buffer, const size_t size);
+		template<class T> __forceinline T read_user_memory(const uint32_t process_id, const uint64_t address)
 		{
 			T buffer;
 			read_user_memory(process_id, address, &buffer, sizeof(T));
 			return buffer;
 		}
 
-		bool write_user_memory(uint32_t process_id, uint64_t address, void* buffer, size_t size);
-		template<class T> __forceinline bool write_user_memory(uint32_t process_id, uint64_t address, T value)
+		bool write_user_memory(const uint32_t process_id, const uint64_t address, void* buffer, const size_t size);
+		template<class T> __forceinline bool write_user_memory(const uint32_t process_id, const uint64_t address, const T value)
 		{
 			return write_user_memory(process_id, address, &value, sizeof(T));
 		}
 
 		bool get_process_modules(
-			uint32_t process_id, uint32_t max_count,
+			const uint32_t process_id, const uint32_t max_count,
 			std::vector< std::pair<std::wstring, std::wstring> >& result
 		);
 	}
