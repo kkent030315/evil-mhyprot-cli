@@ -321,3 +321,130 @@ As I defined as `DWORD result` in [mhyprot.hpp#L40](https://github.com/kkent0303
 I can guess it's a `NTSTATUS` as it typedef'ed as `typedef LONG NTSTATUS` natively and the dispathers return types are `NTSTATUS` and the result will directly be got stored from it.
 
 ![IMAGE](image07.png)
+
+## Enumerate Modules
+
+So the driver has a lots of commands that make us advantage.  
+In this case, we are able to enumerate modules that loaded in the target process by process id and a number which specifies we want to get.
+
+I'll explain herewith below how I made it managed to work it with reverse engineering.  
+The implementation can be found at [mhyprot.cpp#L343](https://github.com/kkent030315/evil-mhyprot-cli/blob/main/src/mhyprot.cpp#L343).  
+
+First of all, As you can see there is `cmp ecx, 82054000h` as I defined in [mhyprot.hpp#L22](https://github.com/kkent030315/evil-mhyprot-cli/blob/main/src/mhyprot.hpp#L22) as `MHYPROT_IOCTL_ENUM_PROCESS_MODULES`.  
+
+![IMAGE](IDA/imgs/image10.png)
+
+And it calls:
+
+```cpp
+__int64 __fastcall sub_FFFFF800188C26D0(unsigned int a1, __int64 a2, __int64 a3)
+{
+  __int64 v3; // rsi
+  unsigned int v4; // ebx
+  bool v5; // di
+  unsigned int v7; // ebx
+  PVOID Object; // [rsp+58h] [rbp+20h]
+
+  v3 = a2;
+  Object = 0i64;
+  v4 = a3;
+  v5 = (int)PsLookupProcessByProcessId(a1, &Object, a3) >= 0;
+  if ( !Object )
+    return 0i64;
+  v7 = sub_FFFFF800188C27D4(Object, v3, v4);
+  if ( Object )
+  {
+    if ( v5 )
+      ObfDereferenceObject(Object);
+  }
+  return v7;
+}
+```
+
+And it calls:  
+
+As you cansee, the function checks is process `32-bit` or `64-bit` by `PsGetProcessWow64Process()` since `PEB` is different between 32 and 64-bit processes.  
+In this case, I only talk about for 64-bit process.  
+
+After that, the function attaches from kernel using `KeStackAttachProcess`. the second parameter is `PKAPC_STATE`.  
+Then, call `PsGetProcessPeb` and get the [PEB](https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb) belongs to the target process.  
+
+...`LDR_MODULE` is undocumented structure.  
+
+```cpp
+typedef struct _LDR_MODULE {
+  LIST_ENTRY              // InLoadOrderModuleList;
+  LIST_ENTRY              // InMemoryOrderModuleList;
+  LIST_ENTRY              // InInitializationOrderModuleList;
+  PVOID                   // BaseAddress;
+  PVOID                   // EntryPoint;
+  ULONG                   // SizeOfImage;
+  UNICODE_STRING          // FullDllName;
+  UNICODE_STRING          // BaseDllName;
+  ULONG                   // Flags;
+  SHORT                   // LoadCount;
+  SHORT                   // TlsIndex;
+  LIST_ENTRY              // HashTableEntry;
+  ULONG                   // TimeDateStamp;
+} LDR_MODULE, *PLDR_MODULE;
+```
+
+```cpp
+__int64 __fastcall sub_FFFFF800188C27D4(
+  __int64 a1,       // pEPROCESS
+  __int64 a2,       // pointer to the buffer that sent from usermode
+  unsigned int a3   // max count to get
+)
+{
+  ...
+  
+  if ( !a1 )
+    return 0i64;
+    
+  v9 = ((__int64 (*)(void))PsGetProcessWow64Process)() != 0;
+  KeStackAttachProcess(v5, &v30);
+  
+  if ( !v9 ) // the process is 64-bit
+  {
+    v17 = PsGetProcessPeb(v5); // Lookup PEB
+    v18 = v17;
+    if ( v17 )
+    {
+      v19 = *(_QWORD *)(v17 + 24); // PEB->Ldr
+      if ( v19 )
+      {
+        for ( j = *(__int64 **)(v19 + 16);
+              j != (__int64 *)(*(_QWORD *)(v18 + 24) + 16i64); // PEB->Ldr(24)->InMemoryOrderModuleList.Flink
+              j = (__int64 *)*j )
+        {
+          if ( v7 < v3 ) // if the counter less than a number what we want to get
+          {
+            v21 = 928i64 * v7; // I confirmed that the output structure is 0x3A0 alignment
+            sub_FFFFF800188C7900(v21 + v4 + 12, 0i64, 256i64); // fill memory by 0 sizeof 0x100
+            sub_FFFFF800188C7900(v21 + v4 + 268, 0i64, 520i64); // fill memory by 0 sizeof 0x208
+            *(_QWORD *)(v21 + v4) = j[6];
+            *(_DWORD *)(v21 + v4 + 8) = *((_DWORD *)j + 16);
+            v22 = *((_WORD *)j + 44);
+            v23 = 127i64;
+            if ( v22 <= 0x7Fu )
+              v23 = v22;
+            sub_FFFFF800188C75C0(v21 + v4 + 12, j[12], v23); // copy to the buffer
+            v24 = *((_WORD *)j + 36);
+            v25 = v24;
+            if ( v24 > 0x103u )
+              v25 = 259i64;
+            sub_FFFFF800188C75C0(v21 + v4 + 268, j[10], v25); // copy to the buffer
+            *(_QWORD *)(v21 + v4 + 792) = *((unsigned int *)j + 32);
+            v3 = v32;
+          }
+          ++v6;
+          ++v7;
+        }
+      }
+    }
+  }
+  else { /* 32-bit PEB (Redacted) */ }
+  KeUnstackDetachProcess(&v30);
+  return v6;
+}
+```
