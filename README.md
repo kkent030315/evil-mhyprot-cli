@@ -489,5 +489,5 @@ What we need is:
 
 - 1. Allocate memory for payload and its result, `0x3A0` * `MaxCount`
 - 2. Send the payload with the ioctl code `0x82054000`
-- 3. Check if the first 4byte is overrided or not
+- 3. Check for the first 4byte
 
