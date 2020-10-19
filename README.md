@@ -365,8 +365,6 @@ __int64 __fastcall sub_FFFFF800188C26D0(unsigned int a1, __int64 a2, __int64 a3)
 }
 ```
 
-And it calls:  
-
 As you cansee, the function checks is process `32-bit` or `64-bit` by `PsGetProcessWow64Process()` since `PEB` is different between 32 and 64-bit processes.  
 In this case, I only talk about for 64-bit process.  
 
@@ -393,7 +391,7 @@ typedef struct _LDR_MODULE {
 } LDR_MODULE, *PLDR_MODULE;
 ```
 
-And the function pseudocode is like:
+And the function pseudocode for `sub_FFFFF800188C27D4` is like:
 
 ```cpp
 __int64 __fastcall sub_FFFFF800188C27D4(
