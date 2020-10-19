@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <fstream>
 #include <filesystem>
+#include <vector>
 
 #include "logger.hpp"
 #include "raw_driver.hpp"
@@ -18,11 +19,13 @@
 #define MHYPROT_IOCTL_INITIALIZE 		0x80034000
 #define MHYPROT_IOCTL_READ_KERNEL_MEMORY	0x83064000
 #define MHYPROT_IOCTL_READ_WRITE_USER_MEMORY	0x81074000
+#define MHYPROT_IOCTL_ENUM_PROCESS_MODULES 0x82054000
 
 #define MHYPROT_ACTION_READ	0x0
 #define MHYPROT_ACTION_WRITE	0x1
 
 #define MHYPROT_OFFSET_SEEDMAP 	0xA0E8
+#define MHYPROT_ENUM_PROCESS_MODULE_SIZE 0x3A0
 
 namespace mhyprot
 {
@@ -45,16 +48,22 @@ namespace mhyprot
 
 	typedef struct _MHYPROT_USER_READ_WRITE_REQUEST
 	{
-		DWORD64 random_key;
-		DWORD action;
-		DWORD unknown_00;
-		DWORD process_id;
-		DWORD unknown_01;
-		DWORD64 buffer;
-		DWORD64 address;
-		ULONG size;
-		ULONG unknown_02;
+		DWORD64		random_key;
+		DWORD		action;
+		DWORD		unknown_00;
+		DWORD		process_id;
+		DWORD		unknown_01;
+		DWORD64		buffer;
+		DWORD64		address;
+		ULONG		size;
+		ULONG		unknown_02;
 	} MHYPROT_USER_READ_WRITE_REQUEST, *PMHYPROT_USER_READ_WRITE_REQUEST;
+
+	typedef struct _MHYPROT_ENUM_PROCESS_MODULES_REQUEST
+	{
+		uint32_t process_id;
+		uint32_t max_count;
+	} MHYPROT_ENUM_PROCESS_MODULES_REQUEST, * PMHYPROT_ENUM_PROCESS_MODULES_REQUEST;
 
 	namespace detail
 	{
@@ -94,5 +103,11 @@ namespace mhyprot
 		{
 			return write_user_memory(process_id, address, &value, sizeof(T));
 		}
+
+		bool get_process_modules(
+			uint32_t process_id,
+			uint32_t max_count,
+			std::vector< std::pair<std::wstring, std::wstring> >& result
+		);
 	}
 }
