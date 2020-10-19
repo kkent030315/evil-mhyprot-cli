@@ -10,7 +10,7 @@ namespace sup
 	//
 	// execute perform tests
 	//
-	__forceinline void perform_tests(const uint32_t process_id)
+	void perform_tests(const uint32_t process_id)
 	{
 		logger::log("\n[>] performing tests...\n");
 
@@ -58,6 +58,22 @@ namespace sup
 		else
 		{
 			logger::log("[+] incorrect nt header received\n");
+		}
+
+		logger::log("\n[>] snatching 5 modules loaded in the process using vulnerable driver...\n");
+
+		std::vector<std::pair<std::wstring, std::wstring>> module_list;
+		if (mhyprot::driver_impl::get_process_modules(process_id, 5, module_list))
+		{
+			for (auto& _module : module_list)
+			{
+				logger::log("[+] ---> %20ws : %ws\n", _module.first.c_str(), _module.second.c_str());
+			}
+			logger::log("[<] snatched!\n\n");
+		}
+		else
+		{
+			logger::log("[!] enum modules test failure\n");
 		}
 
 		logger::log("[<] performed\n");
