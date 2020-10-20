@@ -696,7 +696,7 @@ Also:
 So I don't know what `sub_FFFFF800188C687C` and `sub_FFFFF800188C67F4` does.  
 only one thing I know is that the first one references `PETHREAD+0x400` as follows:
 
-```
+```cpp
 __int64 __fastcall sub_FFFFF800188C687C(__int64 a1_PETHREAD)
 {
   __int64 v1; // rbx
@@ -721,7 +721,7 @@ __int64 __fastcall sub_FFFFF800188C687C(__int64 a1_PETHREAD)
 Confirmed by this subroutine:  
 As you can see the switch-case is winver.
 
-```
+```cpp
 bool __fastcall sub_FFFFF800188C70CC(__int64 a1, __int64 a2, __int64 a3)
 {
   char v4; // [rsp+20h] [rbp-128h]
@@ -810,3 +810,12 @@ Call map:
 
 Confirmed by hooking system-calls in mhyprot kernel module:  
 
+System-calls are properly called exactly same as the pseudocode:
+
+![IMAGE](images/image11.png)
+
+![IMAGE](images/image12.png)
+
+Data is set by the driver, this is the memory view of payload buffer:
+
+![IMAGE](images/image13.png)
