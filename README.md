@@ -556,3 +556,257 @@ and the `sub_FFFFF800188C2314` is:
 Call map:
 
 ![IMAGE](IDA/imgs/image13.png)
+
+## Enumerate Threads 
+
+The driver has a vulnerable ioctl that allows us to enumerate threads in specific process as ring-0 privilege.  
+it also make us able to read kernel structure `PETHREAD` because the ioctl result contains a pointer to it.  
+to read kernel memory, we are already able to do it through this vulnerable driver as well.  
+
+I'll explain how I made managed to work it with reverse engineering.  
+
+First of all, the driver has a function that executes `ZwQuerySystemInformation`.  
+Here is a block found on ioctl handler subroutine:
+
+```cpp
+PAGE:FFFFF800188CD77E loc_FFFFF800188CD77E:                   ; CODE XREF: sub_FFFFF800188CD6E0+8C↑j
+PAGE:FFFFF800188CD77E                 cmp     ecx, 83024000h
+PAGE:FFFFF800188CD784                 jnz     short loc_FFFFF800188CD794
+PAGE:FFFFF800188CD786                 lea     rcx, [rdi+4]
+PAGE:FFFFF800188CD78A                 mov     rdx, rdi
+PAGE:FFFFF800188CD78D                 call    sub_FFFFF800188C62EC
+PAGE:FFFFF800188CD792                 jmp     short loc_FFFFF800188CD7C1
+```
+
+`sub_FFFFF800188C62EC` is:
+
+```cpp
+__int64 __fastcall sub_FFFFF800188C62EC(__int64 a1, _DWORD *a2)
+{
+  __int64 result; // rax
+
+  if ( *a2 == 136 ) // *a2 == 0x88
+    result = sub_FFFFF800188C6488(a2[2], a1, a2[1]);
+  else
+    result = 0xFFFFFFFFi64;
+  return result;
+}
+```
+
+We are seeing an if statement `if ( *a2 == 136 )`, `136` is `0x88`, if the a2(given by context) is not `0x88`, the driver will returns `0xFFFFFFFF`.  
+I have no idea what is this validation is even I finished looking around it for a while...  
+
+Also `sub_FFFFF800188C6488` is:
+
+```cpp
+__int64 __fastcall sub_FFFFF800188C6488(int a1, __int64 a2_OutBuffer, unsigned int a3_ProcessId)
+{
+  v3_OutBuffer = a2_OutBuffer;
+  v4 = a1;
+  v5 = a3_ProcessId;
+  v6 = -1;
+  RtlInitUnicodeString(&SystemRoutineName, L"ZwQuerySystemInformation");
+  v7_pZwQuerySystemInformation = (int (__fastcall *)(__int64, __m128 *, _QWORD, SIZE_T *))MmGetSystemRoutineAddress(&SystemRoutineName);
+  v8_pZwQuerySystemInformation = v7_pZwQuerySystemInformation;
+  if ( v7_pZwQuerySystemInformation )
+  {
+    LODWORD(NumberOfBytes) = 0;
+    if ( v7_pZwQuerySystemInformation(5i64, 0i64, 0i64, &NumberOfBytes) == -1073741820 )// SystemProcessInformation
+    {
+      if ( (_DWORD)NumberOfBytes )
+      {
+        v9 = (__m128 *)ExAllocatePool(NonPagedPool, (unsigned int)NumberOfBytes);
+        v10_ProcInfo = v9;
+        if ( v9 )
+        {
+          RKM_sub_FFFFF800188C7900(v9, 0, (unsigned int)NumberOfBytes);// fill the memory by 0
+          if ( v8_pZwQuerySystemInformation(5i64, v10_ProcInfo, (unsigned int)NumberOfBytes, &NumberOfBytes) >= 0 )// SystemProcessInformation
+          {
+            v11_ProcInfo = v10_ProcInfo;
+            while ( (unsigned __int8)MmIsAddressValid(v11_ProcInfo) )
+            {
+              if ( v11_ProcInfo[5].m128_i32[0] == v4 )
+              {
+                v6 = HIDWORD(v11_ProcInfo->m128_u64[0]);
+                if ( v6 <= v5 )                 // == ProcessId
+                {
+                  v13 = 0i64;
+                  if ( v6 )
+                  {
+                    v14 = v3_OutBuffer + 8;     // data offset per item
+                    v15 = v11_ProcInfo + 19;
+                    do
+                    {
+                      v16 = v15->m128_u64[0];
+                      Object_PETHREAD = 0i64;
+                      PsLookupThreadByThreadId(v16, &Object_PETHREAD);
+                      v17_PETHREAD = Object_PETHREAD;
+                      v18_PETHREAD = Object_PETHREAD;
+                      *(_DWORD *)(v14 - 8) = v11_ProcInfo[5].m128_i32[0];
+                      *(_DWORD *)(v14 - 4) = v16;
+                      *(_QWORD *)v14 = v18_PETHREAD;// set a pointer to the this PETHREAD
+                      *(_QWORD *)(v14 + 8) = GetThreadStartAddress_sub_FFFFF800188C68C8((__int64)v18_PETHREAD);// set thread start address
+                      *(_QWORD *)(v14 + 16) = sub_FFFFF800188C687C((__int64)v17_PETHREAD);// this actually return PETHREAD+0x400
+                      *(_DWORD *)(v14 + 24) = sub_FFFFF800188C67F4((__int64)v17_PETHREAD) != 0;// unknown, bool
+                      if ( v17_PETHREAD )
+                        ObfDereferenceObject(v17_PETHREAD);
+                      ++v13;
+                      v15 += 5;
+                      v14 += 168i64;            // 0xA8 alignment
+                    }
+                    while ( v13 < HIDWORD(v11_ProcInfo->m128_u64[0]) ); SYSTEM_PROCESS_INFORMATION->Threads
+                  }
+                }
+                break;
+              }
+              v12 = LODWORD(v11_ProcInfo->m128_u64[0]);
+              if ( (_DWORD)v12 )
+              {
+                v11_ProcInfo = (__m128 *)((char *)v11_ProcInfo + v12);
+                if ( v11_ProcInfo )
+                  continue;
+              }
+              break;
+            }
+            ExFreePoolWithTag(v10_ProcInfo, 0);
+          }
+        }
+      }
+    }
+  }
+  return v6;
+}
+```
+
+As the pseudocode says, subroutine does:
+
+- 1. Get the pointer to the `ZwQuerySystemInformation` by `MmGetSystemRoutineAddress`
+- 2. Call `ZwQuerySystemInformation` with `SystemProcessInformation` to get pool size what we have to allocate. (bad implementation)
+- 3. Allocate memory using `ExAllocatePool` with the size
+- 4. Call `ZwQuerySystemInformation` again to enumerate processes
+- 5. Enumerate for every single processes and making sure the address is valid by `MmIsAddressValid`
+	- If the process id is match, call `PsLookupThreadByThreadId` to get `PETHREAD` by thread id, then write information into the payload buffer, every single threads.
+
+Also:
+
+- The output data structure is `0xA8` alignment
+- We can get its thread's start address by `sub_FFFFF800188C68C8`
+- We can get its thread's `PETHREAD` address in the kernel
+
+So I don't know what `sub_FFFFF800188C687C` and `sub_FFFFF800188C67F4` does.  
+only one thing I know is that the first one references `PETHREAD+0x400` as follows:
+
+```
+__int64 __fastcall sub_FFFFF800188C687C(__int64 a1_PETHREAD)
+{
+  __int64 v1; // rbx
+  __int64 v2_PETHREAD; // rdi
+  __int64 *v4; // rdi
+
+  v1 = 0i64;
+  v2_PETHREAD = a1_PETHREAD;
+  if ( !qword_FFFFF800188CA728 )
+    return 0i64;
+  if ( (unsigned __int8)MmIsAddressValid(a1_PETHREAD) == 1 )
+  {
+    v4 = (__int64 *)(qword_FFFFF800188CA728 + v2_PETHREAD);// 1048i64 + v2_PETHREAD, winver depends
+    if ( (unsigned __int8)MmIsAddressValid(v4) == 1 )
+      v1 = *v4;
+  }
+  return v1;
+}
+```
+
+`qword_FFFFF800188CA728` is an static variable which has a windows-version-depends offset for the struct member.  
+Confirmed by this subroutine:  
+As you can see the switch-case is winver.
+
+```
+bool __fastcall sub_FFFFF800188C70CC(__int64 a1, __int64 a2, __int64 a3)
+{
+  char v4; // [rsp+20h] [rbp-128h]
+  unsigned int v5; // [rsp+2Ch] [rbp-11Ch]
+  __int64 v6; // [rsp+150h] [rbp+8h]
+
+  switch ( dword_FFFFF800188CA748 )
+  {
+    case 61:
+      qword_FFFFF800188CA700 = 384i64;
+      qword_FFFFF800188CA708 = 360i64;
+      qword_FFFFF800188CA710 = 496i64;
+      qword_FFFFF800188CA720 = 512i64;
+      qword_FFFFF800188CA718 = 616i64;
+      qword_FFFFF800188CA728 = 872i64;
+      qword_FFFFF800188CA730 = 1048i64; // <-
+      qword_FFFFF800188CA738 = 1104i64;
+      qword_FFFFF800188CA740 = 736i64;
+      break;
+    case 62:
+      qword_FFFFF800188CA730 = 1008i64; // <-
+      qword_FFFFF800188CA738 = 1068i64;
+      goto LABEL_15;
+    case 63:
+      qword_FFFFF800188CA730 = 1656i64; // <-
+      qword_FFFFF800188CA738 = 1716i64;
+LABEL_15:
+      qword_FFFFF800188CA718 = 936i64;
+      qword_FFFFF800188CA720 = 1032i64;
+      qword_FFFFF800188CA710 = 1040i64;
+      qword_FFFFF800188CA700 = 736i64;
+      qword_FFFFF800188CA740 = 768i64;
+      break;
+    case 100:
+      RtlGetVersion(&v4);
+      if ( v5 >= 0x4A61 )
+      {
+        qword_FFFFF800188CA730 = 0i64; // <-
+        qword_FFFFF800188CA700 = 1088i64;
+        qword_FFFFF800188CA710 = 1400i64;
+        qword_FFFFF800188CA718 = 1304i64;
+        qword_FFFFF800188CA720 = 1392i64;
+        qword_FFFFF800188CA708 = 1128i64;
+        qword_FFFFF800188CA738 = 1296i64;
+LABEL_9:
+        qword_FFFFF800188CA740 = 912i64;
+        break;
+      }
+      qword_FFFFF800188CA710 = 1056i64;
+      qword_FFFFF800188CA720 = 1048i64;
+      if ( v5 >= 0x47BA )
+      {
+        qword_FFFFF800188CA700 = 744i64;
+        qword_FFFFF800188CA718 = 960i64;
+        qword_FFFFF800188CA708 = 784i64;
+        qword_FFFFF800188CA730 = 1696i64; // <-
+        qword_FFFFF800188CA738 = 1760i64;
+        goto LABEL_9;
+      }
+      qword_FFFFF800188CA718 = 952i64;
+      qword_FFFFF800188CA740 = 904i64;
+      if ( v5 < 0x3AD7 )
+      {
+        qword_FFFFF800188CA700 = 744i64;
+        qword_FFFFF800188CA730 = 1672i64; // <-
+        qword_FFFFF800188CA738 = 1728i64;
+      }
+      else
+      {
+        qword_FFFFF800188CA700 = 736i64;
+        qword_FFFFF800188CA708 = 776i64;
+        qword_FFFFF800188CA730 = 1680i64; // <-
+        qword_FFFFF800188CA738 = 1744i64;
+      }
+      break;
+  }
+  v6 = 0i64;
+  PsLookupProcessByProcessId(4i64, &v6, a3);
+  return sub_FFFFF800188C3D08(v6) == 4;
+}
+```
+
+Call map:
+
+### Proof
+
+Confirmed by hooking system-calls in mhyprot kernel module:  
+
