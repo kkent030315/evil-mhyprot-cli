@@ -13,7 +13,7 @@ A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in ker
 - 10/20/2020 implemented mhyprot::driver_impl::get_system_uptime
 - 10/19/2020 implemented module eunmeration
 
-![IMAGE](image10.png)
+![IMAGE](images/image10.png)
 
 # Overview
 
