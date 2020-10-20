@@ -21,6 +21,7 @@ What we can do with this CLI is as follows:
 - Read/Write any kernel memory with privilege of kernel from usermode
 - Read/Write any user memory with privilege of kernel from usermode
 - Enumerate a number of modules by specific process id (**New**)
+- Get system uptime (**New**)
 - All operations are executed as kernel level privilege (ring-0) by the vulnerable driver
 
 Also:
@@ -42,7 +43,7 @@ Investigating
 # Requirements
 
 - Any version of Windows x64 that the driver works on
-- Administrator privilege does not required if the service already running
+- Administrator privilege **does not required** if the service already running
 
 Tested on:
 
