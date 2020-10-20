@@ -806,6 +806,8 @@ LABEL_9:
 
 Call map:
 
+![IMAGE](images/image14.png)
+
 ### Proof
 
 Confirmed by hooking system-calls in mhyprot kernel module:  
