@@ -9,10 +9,11 @@ A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in ker
 
 # Updates
 
+- 10/20/2020 implemented thread enumeration
 - 10/20/2020 implemented mhyprot::driver_impl::get_system_uptime
-- 10/19/2020 implemented module eunmeration command and its doc
+- 10/19/2020 implemented module eunmeration
 
-![IMAGE](image09.png)
+![IMAGE](images/image10.png)
 
 # Overview
 
@@ -22,6 +23,7 @@ What we can do with this CLI is as follows:
 - Read/Write any user memory with privilege of kernel from usermode
 - Enumerate a number of modules by specific process id (**New**)
 - Get system uptime (**New**)
+- Enumerate threads in specific process, result in allows us to reading `PETHREAD` structure in the kernel directly from CLI as well.
 - All operations are executed as kernel level privilege (ring-0) by the vulnerable driver
 
 Also:
