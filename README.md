@@ -812,10 +812,10 @@ Confirmed by hooking system-calls in mhyprot kernel module:
 
 System-calls are properly called exactly same as the pseudocode:
 
-![IMAGE](image11.png)
+![IMAGE](images/image11.png)
 
-![IMAGE](image12.png)
+![IMAGE](images/image12.png)
 
 Data is set by the driver, this is the memory view of payload buffer:
 
-![IMAGE](image13.png)
+![IMAGE](images/image13.png)
