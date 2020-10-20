@@ -506,3 +506,51 @@ Call map:
 I've hooked some part of mhyprot kernel module, especially `PsGetProcessPEB` and `PsLookupProcessByProcessId` and confirmed.
 
 ![IMAGE](IDA/imgs/image11.png)
+
+## Getting System Uptime
+
+The driver ioctl implements getting system uptime as follows:  
+
+It eventually calls `KeQueryTimeIncrement` which could get system uptime in nanoseconds.
+
+```cpp
+PAGE:FFFFF800188CD737 loc_FFFFF800188CD737:                   ; CODE XREF: sub_FFFFF800188CD6E0+38↑j
+PAGE:FFFFF800188CD737                 lea     eax, [rcx+7FEEC000h]
+PAGE:FFFFF800188CD73D                 mov     edx, 80134000h
+PAGE:FFFFF800188CD742                 test    eax, 0FFFCFFFFh
+PAGE:FFFFF800188CD747                 jnz     short loc_FFFFF800188CD751
+PAGE:FFFFF800188CD749                 cmp     ecx, edx
+PAGE:FFFFF800188CD74B                 jnz     loc_FFFFF800188CDA4F
+PAGE:FFFFF800188CD751
+PAGE:FFFFF800188CD751 loc_FFFFF800188CD751:                   ; CODE XREF: sub_FFFFF800188CD6E0+67↑j
+PAGE:FFFFF800188CD751                 cmp     ecx, edx // if (ioctl_code == 0x80134000)
+PAGE:FFFFF800188CD753                 jnz     short loc_FFFFF800188CD766
+PAGE:FFFFF800188CD755                 call    sub_FFFFF800188C2314 // <-
+PAGE:FFFFF800188CD75A                 mov     [rdi], eax // *(unsigned int*)req_ctx = (unsigned int)result
+```
+
+and the `sub_FFFFF800188C2314` is:
+
+```cpp
+.text:FFFFF800188C2314 sub_FFFFF800188C2314 proc near          ; CODE XREF: sub_FFFFF800188C141C+C↑p
+.text:FFFFF800188C2314                                         ; sub_FFFFF800188C5C0C+38↓p ...
+.text:FFFFF800188C2314                 sub     rsp, 28h
+.text:FFFFF800188C2318                 call    cs:KeQueryTimeIncrement // <-
+.text:FFFFF800188C231E                 mov     eax, eax
+.text:FFFFF800188C2320                 mov     rcx, 0FFFFF78000000320h
+.text:FFFFF800188C232A                 mov     rcx, [rcx]
+.text:FFFFF800188C232D                 imul    rcx, rax
+.text:FFFFF800188C2331                 mov     rax, 346DC5D63886594Bh
+.text:FFFFF800188C233B                 imul    rcx
+.text:FFFFF800188C233E                 sar     rdx, 0Bh
+.text:FFFFF800188C2342                 mov     rax, rdx
+.text:FFFFF800188C2345                 shr     rax, 3Fh
+.text:FFFFF800188C2349                 add     rax, rdx
+.text:FFFFF800188C234C                 add     rsp, 28h
+.text:FFFFF800188C2350                 retn // (unsigned integer) miliseconds
+.text:FFFFF800188C2350 sub_FFFFF800188C2314 endp
+```
+
+Call map:
+
+![IMAGE](IDA/imgs/image13.png)
