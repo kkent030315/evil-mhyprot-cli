@@ -9,10 +9,11 @@ A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in ker
 
 # Updates
 
+- 10/20/2020 implemented thread enumeration
 - 10/20/2020 implemented mhyprot::driver_impl::get_system_uptime
-- 10/19/2020 implemented module eunmeration command and its doc
+- 10/19/2020 implemented module eunmeration
 
-![IMAGE](image09.png)
+![IMAGE](image10.png)
 
 # Overview
 
