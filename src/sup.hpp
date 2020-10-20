@@ -39,6 +39,8 @@ namespace sup
 	{
 		logger::log("\n[>] performing tests...\n");
 
+		logger::log("[+] system uptime (by vulnerable driver): %d\n", mhyprot::driver_impl::get_system_uptime());
+
 		//
 		// read dos-header using winapi
 		//

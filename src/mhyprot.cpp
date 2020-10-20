@@ -435,3 +435,30 @@ bool mhyprot::driver_impl::get_process_modules(
 
     return true;
 }
+
+//
+// get system uptime by seconds
+// this eventually calls KeQueryTimeIncrement in the driver context
+//
+uint32_t mhyprot::driver_impl::get_system_uptime()
+{
+    //
+    // miliseconds
+    //
+    uint32_t result;
+
+    static_assert(
+        sizeof(uint32_t) == 4,
+        "invalid compiler specific size of uint32_t, this may cause BSOD"
+        );
+
+    if (!request_ioctl(MHYPROT_IOCTL_GET_UPTIME, &result, sizeof(uint32_t)))
+    {
+        return -1;
+    }
+
+    //
+    // convert it to the seconds
+    //
+    return static_cast<uint32_t>(result / 1000);
+}

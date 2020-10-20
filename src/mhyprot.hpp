@@ -45,6 +45,7 @@
 #define MHYPROT_IOCTL_READ_KERNEL_MEMORY	0x83064000
 #define MHYPROT_IOCTL_READ_WRITE_USER_MEMORY	0x81074000
 #define MHYPROT_IOCTL_ENUM_PROCESS_MODULES 0x82054000
+#define MHYPROT_IOCTL_GET_UPTIME 0x80134000
 
 #define MHYPROT_ACTION_READ	0x0
 #define MHYPROT_ACTION_WRITE	0x1
@@ -133,5 +134,7 @@ namespace mhyprot
 			const uint32_t process_id, const uint32_t max_count,
 			std::vector< std::pair<std::wstring, std::wstring> >& result
 		);
+
+		uint32_t get_system_uptime();
 	}
 }
