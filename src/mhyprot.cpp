@@ -432,7 +432,6 @@ bool mhyprot::driver_impl::get_process_modules(
     }
 
     free(payload);
-
     return true;
 }
 
@@ -468,8 +467,15 @@ bool mhyprot::driver_impl::get_process_threads(
     std::vector<MHYPROT_THREAD_INFORMATION>& result
 )
 {
+    //
+    // allocation size must have enough size for result
+    // and the result is 0xA8 alignment
+    //
     const size_t alloc_size = 50 * MHYPROT_ENUM_PROCESS_THREADS_SIZE;
 
+    //
+    // allocate memory for payload and its result
+    //
     PMHYPROT_ENUM_PROCESS_THREADS_REQUEST payload =
         (PMHYPROT_ENUM_PROCESS_THREADS_REQUEST)calloc(1, alloc_size);
 
@@ -488,6 +494,11 @@ bool mhyprot::driver_impl::get_process_threads(
         return false;
     }
 
+    //
+    // if the request succeed in the driver context,
+    // a number of threads that stored in the buffer will be reported
+    // in first 4byte
+    //
     if (!payload->validation_code ||
         payload->validation_code <= 0 ||
         payload->validation_code > 1000)
@@ -511,6 +522,5 @@ bool mhyprot::driver_impl::get_process_threads(
     }
 
     free(payload);
-
     return true;
 }
