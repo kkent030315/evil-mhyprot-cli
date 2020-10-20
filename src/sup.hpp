@@ -103,7 +103,7 @@ namespace sup
 			logger::log("[!] enum modules test failure\n");
 		}
 
-		logger::log("\n[>] snatching threads in the target process vulnerable driver...\n");
+		logger::log("\n[>] snatching threads in the target process using vulnerable driver...\n");
 
 		std::vector<mhyprot::MHYPROT_THREAD_INFORMATION> thread_list;
 
