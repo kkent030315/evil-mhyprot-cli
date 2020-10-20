@@ -46,12 +46,16 @@
 #define MHYPROT_IOCTL_READ_WRITE_USER_MEMORY	0x81074000
 #define MHYPROT_IOCTL_ENUM_PROCESS_MODULES 0x82054000
 #define MHYPROT_IOCTL_GET_UPTIME 0x80134000
+#define MHYPROT_IOCTL_ENUM_PROCESS_THREADS 0x83024000
 
 #define MHYPROT_ACTION_READ	0x0
 #define MHYPROT_ACTION_WRITE	0x1
 
 #define MHYPROT_OFFSET_SEEDMAP 	0xA0E8
 #define MHYPROT_ENUM_PROCESS_MODULE_SIZE 0x3A0
+
+#define MHYPROT_ENUM_PROCESS_THREADS_SIZE 0xA8
+#define MHYPROT_ENUM_PROCESS_THREADS_CODE 0x88
 
 namespace mhyprot
 {
@@ -91,6 +95,20 @@ namespace mhyprot
 		uint32_t max_count;
 	} MHYPROT_ENUM_PROCESS_MODULES_REQUEST, * PMHYPROT_ENUM_PROCESS_MODULES_REQUEST;
 
+	typedef struct _MHYPROT_ENUM_PROCESS_THREADS_REQUEST
+	{
+		uint32_t validation_code;
+		uint32_t process_id;
+		uint32_t owner_process_id;
+	} MHYPROT_ENUM_PROCESS_THREADS_REQUEST, * PMHYPROT_ENUM_PROCESS_THREADS_REQUEST;
+
+	typedef struct _MHYPROT_THREAD_INFORMATION
+	{
+		uint64_t kernel_address;
+		uint64_t start_address;
+		bool unknown;
+	} MHYPROT_THREAD_INFORMATION, * PMHYPROT_THREAD_INFORMATION;
+
 	namespace detail
 	{
 		inline HANDLE device_handle;
@@ -116,18 +134,23 @@ namespace mhyprot
 			return buffer;
 		}
 
-		bool read_user_memory(const uint32_t process_id, const uint64_t address, void* buffer, const size_t size);
-		template<class T> __forceinline T read_user_memory(const uint32_t process_id, const uint64_t address)
+		bool read_process_memory(const uint32_t process_id, const uint64_t address, void* buffer, const size_t size);
+		template<class T> __forceinline T read_process_memory(
+			const uint32_t process_id, const uint64_t address
+		)
 		{
 			T buffer;
-			read_user_memory(process_id, address, &buffer, sizeof(T));
+			read_process_memory(process_id, address, &buffer, sizeof(T));
 			return buffer;
 		}
 
-		bool write_user_memory(const uint32_t process_id, const uint64_t address, void* buffer, const size_t size);
-		template<class T> __forceinline bool write_user_memory(const uint32_t process_id, const uint64_t address, const T value)
+		bool write_process_memory(const uint32_t process_id, const uint64_t address, void* buffer, const size_t size);
+		template<class T> __forceinline bool write_process_memory(
+			const uint32_t process_id,
+			const uint64_t address, const T value
+		)
 		{
-			return write_user_memory(process_id, address, &value, sizeof(T));
+			return write_process_memory(process_id, address, &value, sizeof(T));
 		}
 
 		bool get_process_modules(
@@ -136,5 +159,10 @@ namespace mhyprot
 		);
 
 		uint32_t get_system_uptime();
+
+		bool get_process_threads(
+			const uint32_t& process_id, const uint32_t& owner_process_id,
+			std::vector<MHYPROT_THREAD_INFORMATION>& result
+		);
 	}
 }

