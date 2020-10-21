@@ -73,6 +73,10 @@ following options are available as of now:
 > The document(s) below is still in write
 so please forgive any mistakes I took in advance.
 
+driver's device handle is opened by the game process `GenshinImpact.exe`.
+
+![IMAGE](images/image15.png)
+
 ## IOCTL Handler Functions
 
 So what I did is that to reverse engineering around IOCTL handling functionalities.  
