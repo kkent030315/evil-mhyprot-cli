@@ -121,10 +121,10 @@ namespace mhyprot
 
 	namespace driver_impl
 	{
-		bool request_ioctl(DWORD ioctl_code, LPVOID in_buffer, DWORD in_buffer_size);
+		bool request_ioctl(const uint32_t ioctl_code, void* in_buffer, const size_t in_buffer_size);
 		bool driver_init(bool debug_prints = false, bool print_seeds = false);
 		uint64_t generate_key(uint64_t seed);
-		void encrypt_payload(void* payload, size_t size);
+		void encrypt_payload(void* payload, const size_t size);
 
 		bool read_kernel_memory(const uint64_t address, void* buffer, const size_t size);
 		template<class T> __forceinline T read_kernel_memory(const uint64_t address)

