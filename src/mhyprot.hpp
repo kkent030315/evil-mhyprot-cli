@@ -134,7 +134,11 @@ namespace mhyprot
 			return buffer;
 		}
 
-		bool read_process_memory(const uint32_t process_id, const uint64_t address, void* buffer, const size_t size);
+		bool read_process_memory(
+			const uint32_t process_id,
+			const uint64_t address, void* buffer, const size_t size
+		);
+
 		template<class T> __forceinline T read_process_memory(
 			const uint32_t process_id, const uint64_t address
 		)
@@ -144,7 +148,11 @@ namespace mhyprot
 			return buffer;
 		}
 
-		bool write_process_memory(const uint32_t process_id, const uint64_t address, void* buffer, const size_t size);
+		bool write_process_memory(
+			const uint32_t process_id,
+			const uint64_t address, void* buffer, const size_t size
+		);
+
 		template<class T> __forceinline bool write_process_memory(
 			const uint32_t process_id,
 			const uint64_t address, const T value
