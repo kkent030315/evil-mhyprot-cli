@@ -61,32 +61,32 @@ namespace mhyprot
 {
 	typedef struct _MHYPROT_INITIALIZE
 	{
-		DWORD		_m_001;
-		DWORD		_m_002;
-		DWORD64		_m_003;
+		uint32_t _m_001;
+		uint32_t _m_002;
+		uint64_t _m_003;
 	} MHYPROT_INITIALIZE, *PMHYPROT_INITIALIZE;
 
 	typedef struct _MHYPROT_KERNEL_READ_REQUEST
 	{
-		union _HEADER
+		union
 		{
-			DWORD		result;
-			DWORD64		address;
-		} header;
-		ULONG size;
+			uint32_t result;
+			uint64_t address;
+		};
+		size_t size;
 	} MHYPROT_KERNEL_READ_REQUEST, *PMHYPROT_KERNEL_READ_REQUEST;
 
 	typedef struct _MHYPROT_USER_READ_WRITE_REQUEST
 	{
-		DWORD64		random_key;
-		DWORD		action;
-		DWORD		unknown_00;
-		DWORD		process_id;
-		DWORD		unknown_01;
-		DWORD64		buffer;
-		DWORD64		address;
-		ULONG		size;
-		ULONG		unknown_02;
+		uint64_t	response;
+		uint32_t	action_code;
+		uint32_t	reserved_01;
+		uint32_t	process_id;
+		uint32_t	reserved_02;
+		uint64_t	buffer;
+		uint64_t	address;
+		size_t		size;
+		size_t		reverved_03;
 	} MHYPROT_USER_READ_WRITE_REQUEST, *PMHYPROT_USER_READ_WRITE_REQUEST;
 
 	typedef struct _MHYPROT_ENUM_PROCESS_MODULES_REQUEST

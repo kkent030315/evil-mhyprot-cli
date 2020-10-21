@@ -302,7 +302,7 @@ bool mhyprot::driver_impl::read_kernel_memory(
         return false;
     }
 
-    payload->header.address = address;
+    payload->address = address;
     payload->size = size;
 
     if (!request_ioctl(MHYPROT_IOCTL_READ_KERNEL_MEMORY, payload, payload_size))
@@ -310,7 +310,7 @@ bool mhyprot::driver_impl::read_kernel_memory(
         return false;
     }
 
-    if (!payload->header.result)
+    if (!payload->result)
     {
         memcpy(buffer, (PUCHAR)payload + 4, size);
         return true;
@@ -329,7 +329,7 @@ bool mhyprot::driver_impl::read_process_memory(
 )
 {
     MHYPROT_USER_READ_WRITE_REQUEST payload;
-    payload.action = MHYPROT_ACTION_READ;   // action code
+    payload.action_code = MHYPROT_ACTION_READ;   // action code
     payload.process_id = process_id;        // target process id
     payload.address = address;              // address
     payload.buffer = (uint64_t)buffer;      // our buffer
@@ -354,7 +354,7 @@ bool mhyprot::driver_impl::write_process_memory(
 )
 {
     MHYPROT_USER_READ_WRITE_REQUEST payload;
-    payload.action = MHYPROT_ACTION_WRITE;  // action code
+    payload.action_code = MHYPROT_ACTION_WRITE;  // action code
     payload.process_id = process_id;        // target process id
     payload.address = (uint64_t)buffer;     // our buffer
     payload.buffer = address;               // destination
