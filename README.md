@@ -1,8 +1,8 @@
 ![LOGO](logo.png)
 
-![IMAGE](image01.png)
-![IMAGE](image04.png)
-![IMAGE](image05.png)
+![IMAGE](images/image01.png)
+![IMAGE](images/image04.png)
+![IMAGE](images/image05.png)
 
 # evil-mhyprot-cli
 A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in kernel/user from usermode.
@@ -87,7 +87,7 @@ Since around ioctl functions and its functionalities are packed, to reverse engi
 but I can still easily find the function that registered at `DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]` since the IOCTL handler must have an `IoCompleteRequest` or like `IofCompleteRequest` that exported by `ntoskrnl`.  
 (Btw `IoCompleteRequest` is just a wrapper of `IofCompleteRequest`)  
 
-![IMAGE](image03.png)
+![IMAGE](images/image03.png)
 
 As mhyprot imports `IofCompleteRequest` then go xrefs, and we will see there are many ioctl handlers.  
 Concretely, I found two big subroutine in packed segment.  
@@ -271,13 +271,13 @@ PAGE:FFFFF800188CD31B                 jmp     loc_FFFFF800188CD21C
 
 Call map:
 
-![IMAGE](image06.png)
+![IMAGE](images/image06.png)
 
 ### Proof
 
 I have confirmed that by simply hooking mhyprot kernel module:
 
-![IMAGE](image08.png)
+![IMAGE](images/image08.png)
 
 ## A Way of Read Kernel Memory
 
@@ -329,14 +329,14 @@ And the `sub_FFFFF800188C63A8` is like:
   
 Here is the ioctl handlers, found the `0x83064000`(`MHYPROT_IOCTL_READ_KERNEL_MEMORY`) as `cmp ecx, 83064000h` and some another ioctl codes as follows:
 
-![IMAGE](image02.png)
+![IMAGE](images/image02.png)
 
 Call map:  
   
 As I defined as `DWORD result` in [mhyprot.hpp#L40](https://github.com/kkent030315/evil-mhyprot-cli/blob/main/src/mhyprot.hpp#L40) the first 4bytes is result.  
 I can guess it's a `NTSTATUS` as it typedef'ed as `typedef LONG NTSTATUS` natively and the dispathers return types are `NTSTATUS` and the result will directly be got stored from it.
 
-![IMAGE](image07.png)
+![IMAGE](images/image07.png)
 
 ## Enumerate Modules
 
