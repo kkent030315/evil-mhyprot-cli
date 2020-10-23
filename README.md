@@ -10,7 +10,8 @@
 
 A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in kernel/user from usermode.
 
-### Static Library is here: [libmhyprot](https://github.com/kkent030315/libmhyprot)
+### ✅ Static Library is here: [libmhyprot](https://github.com/kkent030315/libmhyprot)
+### ✅ Documents are moved to the [Wiki](https://github.com/kkent030315/evil-mhyprot-cli/wiki)
 
 # Overview
 
