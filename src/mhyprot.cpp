@@ -373,6 +373,9 @@ bool mhyprot::driver_impl::write_process_memory(
     );
 }
 
+//
+// get a number of modules that loaded in the target process
+//
 bool mhyprot::driver_impl::get_process_modules(
     const uint32_t process_id, const uint32_t max_count,
     std::vector<std::pair<std::wstring, std::wstring>>& result
