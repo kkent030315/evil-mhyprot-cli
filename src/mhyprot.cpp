@@ -452,7 +452,7 @@ uint32_t mhyprot::driver_impl::get_system_uptime()
         "invalid compiler specific size of uint32_t, this may cause BSOD"
         );
 
-    if (!request_ioctl(MHYPROT_IOCTL_GET_UPTIME, &result, sizeof(uint32_t)))
+    if (!request_ioctl(MHYPROT_IOCTL_GET_SYSTEM_UPTIME, &result, sizeof(uint32_t)))
     {
         return -1;
     }
