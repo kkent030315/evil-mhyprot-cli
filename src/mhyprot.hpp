@@ -80,12 +80,8 @@ namespace mhyprot
 
 	typedef struct _MHYPROT_KERNEL_READ_REQUEST
 	{
-		union
-		{
-			uint32_t result;
-			uint64_t address;
-		};
-		size_t size;
+		uint64_t	address;
+		ULONG		size;
 	} MHYPROT_KERNEL_READ_REQUEST, *PMHYPROT_KERNEL_READ_REQUEST;
 
 	typedef struct _MHYPROT_USER_READ_WRITE_REQUEST
@@ -97,8 +93,8 @@ namespace mhyprot
 		uint32_t	reserved_02;
 		uint64_t	buffer;
 		uint64_t	address;
-		size_t		size;
-		size_t		reverved_03;
+		ULONG		size;
+		ULONG		reverved_03;
 	} MHYPROT_USER_READ_WRITE_REQUEST, *PMHYPROT_USER_READ_WRITE_REQUEST;
 
 	typedef struct _MHYPROT_ENUM_PROCESS_MODULES_REQUEST
