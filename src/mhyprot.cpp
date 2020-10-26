@@ -526,6 +526,10 @@ bool mhyprot::driver_impl::get_process_threads(
     return true;
 }
 
+//
+// terminate specific process by process id
+// this eventually calls ZwTerminateProcess in the driver context
+//
 bool mhyprot::driver_impl::terminate_process(const uint32_t process_id)
 {
     MHYPROT_TERMINATE_PROCESS_REQUEST payload;
