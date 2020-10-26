@@ -63,7 +63,7 @@ SC_HANDLE service_utils::create_service(const std::string_view driver_path)
             mhyprot_service_handle = OpenService(
                 sc_manager_handle,
                 MHYPROT_SERVICE_NAME,
-                SERVICE_START | SERVICE_STOP | DELETE
+                SERVICE_START | SERVICE_STOP | DELETE | SERVICE_QUERY_STATUS
             );
 
             if (!CHECK_HANDLE(mhyprot_service_handle))
@@ -106,7 +106,14 @@ SC_HANDLE service_utils::create_service(const std::string_view driver_path)
             return mhyprot_service_handle;
         }
 
-        logger::log("[!] failed to create %s service. (0x%lX)\n", MHYPROT_SERVICE_NAME, GetLastError());
+        const auto _last_error = GetLastError();
+
+        if (_last_error == 0x5)
+        {
+            logger::log("[!] access denied. this is due to the service already exists or running. please take action manually\n");
+        }
+
+        logger::log("[!] failed to create %s service. (0x%lX)\n", MHYPROT_SERVICE_NAME, _last_error);
         CloseServiceHandle(sc_manager_handle);
         return (SC_HANDLE)(INVALID_HANDLE_VALUE);
     }

@@ -47,6 +47,7 @@
 #define MHYPROT_IOCTL_ENUM_PROCESS_MODULES 0x82054000
 #define MHYPROT_IOCTL_GET_UPTIME 0x80134000
 #define MHYPROT_IOCTL_ENUM_PROCESS_THREADS 0x83024000
+#define MHYPROT_IOCTL_TERMINATE_PROCESS 0x81034000
 
 #define MHYPROT_ACTION_READ	0x0
 #define MHYPROT_ACTION_WRITE	0x1
@@ -119,6 +120,12 @@ namespace mhyprot
 		bool unknown;
 	} MHYPROT_THREAD_INFORMATION, * PMHYPROT_THREAD_INFORMATION;
 
+	typedef struct _MHYPROT_TERMINATE_PROCESS_REQUEST
+	{
+		uint64_t response;
+		uint32_t process_id;
+	} MHYPROT_TERMINATE_PROCESS_REQUEST, * PMHYPROT_TERMINATE_PROCESS_REQUEST;
+
 	namespace detail
 	{
 		inline HANDLE device_handle;
@@ -181,5 +188,7 @@ namespace mhyprot
 			const uint32_t& process_id, const uint32_t& owner_process_id,
 			std::vector<MHYPROT_THREAD_INFORMATION>& result
 		);
+
+		bool terminate_process(const uint32_t process_id);
 	}
 }

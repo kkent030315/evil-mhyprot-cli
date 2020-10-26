@@ -257,13 +257,13 @@ void mhyprot::driver_impl::encrypt_payload(void* payload, const size_t size)
 {
     if (size % 8)
     {
-        logger::log("[!] (payload) size must be 8-byte alignment");
+        logger::log("[!] (payload) size must be 8-byte alignment\n");
         return;
     }
 
     if (size / 8 >= 0x138)
     {
-        logger::log("[!] (payload) size must be < 0x9C0");
+        logger::log("[!] (payload) size must be < 0x9C0\n");
         return;
     }
 
@@ -523,5 +523,25 @@ bool mhyprot::driver_impl::get_process_threads(
     }
 
     free(payload);
+    return true;
+}
+
+bool mhyprot::driver_impl::terminate_process(const uint32_t process_id)
+{
+    MHYPROT_TERMINATE_PROCESS_REQUEST payload;
+    payload.process_id = process_id;
+
+    encrypt_payload(&payload, sizeof(payload));
+
+    if (!request_ioctl(MHYPROT_IOCTL_TERMINATE_PROCESS, &payload, sizeof(payload)))
+    {
+        return false;
+    }
+
+    if (!payload.response)
+    {
+        return false;
+    }
+
     return true;
 }
