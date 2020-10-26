@@ -22,6 +22,7 @@ What we can do with this CLI is as follows:
 - Enumerate a number of modules by specific process id
 - Get system uptime
 - Enumerate threads in specific process, result in allows us to reading `PETHREAD` structure in the kernel directly from CLI as well.
+- Terminate specific process by process id with `ZwTerminateProcess` which called in the vulnerable driver context (ring-0).
 - All operations are executed as kernel level privilege (ring-0) by the vulnerable driver
 
 Also:
