@@ -66,7 +66,7 @@ extern "C" {
 	uint64_t generate_key(uint64_t seed);
 
 #ifdef __cplusplus
-}
+};
 #endif
 
 namespace mhyprot
