@@ -1,4 +1,9 @@
 ![LOGO](logo.png)
+<p align="center">
+  <img src="https://img.shields.io/github/license/kkent030315/evil-mhyprot-cli?style=for-the-badge">
+  <img src="https://img.shields.io/github/last-commit/kkent030315/evil-mhyprot-cli?style=for-the-badge">
+  <img src="https://img.shields.io/codefactor/grade/github/kkent030315/evil-mhyprot-cli?style=for-the-badge">
+</p>
 
 ![IMAGE](images/image01.png)
 ![IMAGE](images/image04.png)
