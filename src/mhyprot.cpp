@@ -311,6 +311,9 @@ bool mhyprot::driver_impl::read_kernel_memory(
         return false;
     }
 
+    //
+    // result will be overrided in first 4bytes of the payload
+    //
     if (!*(uint32_t*)payload)
     {
         memcpy(buffer, reinterpret_cast<uint8_t*>(payload) + sizeof(uint32_t), size);
