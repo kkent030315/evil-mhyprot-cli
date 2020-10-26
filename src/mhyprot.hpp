@@ -57,6 +57,16 @@
 #define MHYPROT_ENUM_PROCESS_THREADS_SIZE 0xA8
 #define MHYPROT_ENUM_PROCESS_THREADS_CODE 0x88
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+	uint64_t generate_key(uint64_t seed);
+
+#ifdef __cplusplus
+}
+#endif
+
 namespace mhyprot
 {
 	typedef struct _MHYPROT_INITIALIZE
@@ -123,7 +133,6 @@ namespace mhyprot
 	{
 		bool request_ioctl(const uint32_t ioctl_code, void* in_buffer, const size_t in_buffer_size);
 		bool driver_init(bool debug_prints = false, bool print_seeds = false);
-		uint64_t generate_key(uint64_t seed);
 		void encrypt_payload(void* payload, const size_t size);
 
 		bool read_kernel_memory(const uint64_t address, void* buffer, const size_t size);
