@@ -1,20 +1,10 @@
-<p align="center"><img src="images/logo_min.png"></p>
-<p align="center">
-  <img src="https://img.shields.io/github/license/kkent030315/evil-mhyprot-cli?style=for-the-badge">
-  <img src="https://img.shields.io/github/last-commit/kkent030315/evil-mhyprot-cli?style=for-the-badge">
-  <img src="https://img.shields.io/codefactor/grade/github/kkent030315/evil-mhyprot-cli?style=for-the-badge">
-</p>
-
 ![IMAGE](images/image01.png)
 ![IMAGE](images/image04.png)
 ![IMAGE](images/image05.png)
 
 # evil-mhyprot-cli
 
-A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in kernel/user from usermode.
-
-### ✅ Static Library is here: [libmhyprot](https://github.com/kkent030315/libmhyprot)
-### ✅ Documents are moved to the [Wiki](https://github.com/kkent030315/evil-mhyprot-cli/wiki)
+A PoC for vulnerable driver "mhyprot" that allows atatcker to read/write memory in kernel/user from usermode.
 
 # Overview
 
@@ -24,7 +14,7 @@ What we can do with this CLI is as follows:
 - Read/Write any user memory with privilege of kernel from usermode
 - Enumerate a number of modules by specific process id
 - Get system uptime
-- Enumerate threads in specific process, result in allows us to reading `PETHREAD` structure in the kernel directly from CLI as well.
+- Enumerate threads in specific process, result in allows attackers to reading `PETHREAD` structure in the kernel directly from CLI as well.
 - Terminate specific process by process id with `ZwTerminateProcess` which called in the vulnerable driver context (ring-0).
 - All operations are executed as kernel level privilege (ring-0) by the vulnerable driver
 
@@ -63,6 +53,6 @@ following options are available as of now:
 - `s`
   - Print seedmap
 
-# Latest
+# Screenshot of the Latest version
 
 ![IMAGE](images/image10.png)
