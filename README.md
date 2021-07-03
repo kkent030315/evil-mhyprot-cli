@@ -11,10 +11,10 @@
 
 # evil-mhyprot-cli
 
-A PoC for vulnerable driver "mhyprot" that allows us to read/write memory in kernel/user from usermode.
+A PoC for Mhyprot2.sys vulnerable driver that allowing read/write memory in kernel/user via unprivileged user process.
 
-### ✅ Static Library is here: [libmhyprot](https://github.com/kkent030315/libmhyprot)
-### ✅ Documents are moved to the [Wiki](https://github.com/kkent030315/evil-mhyprot-cli/wiki)
+- [libmhyprot](https://github.com/kkent030315/libmhyprot)
+- [Wiki](https://github.com/kkent030315/evil-mhyprot-cli/wiki)
 
 # Overview
 
