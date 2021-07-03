@@ -33,10 +33,6 @@ Also:
 - Administrator privilege only needed if the service is not yet running
 - Therefore we can execute commands above as the normal user (w/o administrator privilege)
 
-# Impact
-
-Investigating
-
 # Requirements
 
 - Any version of Windows x64 that the driver works on
